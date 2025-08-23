@@ -33,4 +33,21 @@ export class ExercisesService {
   remove(id: number) {
     return this.repo.delete(id);
   }
+
+  async syncFromWger() {
+    const resp = await fetch('https://wger.de/api/v2/exercise/?language=2&status=2&limit=500');
+    const data = await resp.json();
+    for (const item of data.results ?? []) {
+      const existing = await this.repo.findOne({ where: { name: item.name } });
+      if (!existing) {
+        const exercise = this.repo.create({
+          name: item.name,
+          category: 'accessory',
+          description: item.description,
+        });
+        await this.repo.save(exercise);
+      }
+    }
+    return this.findAll();
+  }
 }

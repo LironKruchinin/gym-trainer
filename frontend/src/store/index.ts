@@ -7,6 +7,7 @@ import type { TypedUseSelectorHook } from 'react-redux';
 import countReducer from './slices/count/countSlice';
 import { api } from './slices/api/apiSlice';
 import trainingLogsReducer from './slices/trainingLogs/trainingLogsSlice';
+import traineesReducer from './slices/trainees/traineesSlice';
 // import userReducer from './slices/user/userSlice';
 
 export const store = configureStore({
@@ -14,6 +15,7 @@ export const store = configureStore({
         [api.reducerPath]: api.reducer,
         count: countReducer,
         trainingLogs: trainingLogsReducer,
+        trainees: traineesReducer,
         // user: userReducer,
     },
     middleware: (getDefault) =>
@@ -32,3 +34,4 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 export * from './slices/count/countSlice';
 export * from './slices/user/userSlice';
 export * from './slices/trainingLogs/trainingLogsSlice';
+export * from './slices/trainees/traineesSlice';

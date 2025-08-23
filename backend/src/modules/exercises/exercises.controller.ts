@@ -34,4 +34,9 @@ export class ExercisesController {
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.svc.remove(id);
   }
+
+  @Post('sync')
+  sync() {
+    return this.svc.syncFromWger();
+  }
 }
