@@ -19,10 +19,6 @@ export default function ExerciseSelector({ value, onChange }: Props) {
                 if (!res.ok) {
                     throw new Error(`unexpected status ${res.status}`);
                 }
-                const contentType = res.headers.get('content-type') ?? '';
-                if (!contentType.includes('application/json')) {
-                    throw new Error(`expected JSON, got ${contentType}`);
-                }
                 const data: Array<{ name?: string }> = await res.json();
                 const names = (data || [])
                     .map((e) => sanitize(e.name))
