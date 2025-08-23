@@ -54,7 +54,17 @@
     &__actions {
         display: flex;
         justify-content: flex-end;
+        gap: 0.5rem;
         margin-top: 1rem;
+    }
+
+    &__cancel {
+        padding: 0.5rem 1rem;
+        border: none;
+        background: #ccc;
+        color: #000;
+        border-radius: 6px;
+        cursor: pointer;
     }
 
     &__save {
