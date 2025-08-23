@@ -9,6 +9,7 @@ export interface Exercise {
 }
 
 export interface Program {
+    id?: number;
     name: string;
     exercises: Exercise[];
     description?: string;
@@ -46,4 +47,25 @@ export async function createProgram(program: Program) {
         throw new Error(msg || 'Failed to save');
     }
     return res.json();
+}
+
+export async function getPrograms(): Promise<Program[]> {
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+    const url = new URL('training-programs', apiUrl.endsWith('/') ? apiUrl : apiUrl + '/').toString();
+    const res = await fetch(url);
+    if (!res.ok) {
+        const msg = await res.text();
+        throw new Error(msg || 'Failed to load');
+    }
+    return res.json();
+}
+
+export async function deleteProgram(id: number): Promise<void> {
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+    const url = new URL(`training-programs/${id}`, apiUrl.endsWith('/') ? apiUrl : apiUrl + '/').toString();
+    const res = await fetch(url, { method: 'DELETE' });
+    if (!res.ok) {
+        const msg = await res.text();
+        throw new Error(msg || 'Failed to delete');
+    }
 }
