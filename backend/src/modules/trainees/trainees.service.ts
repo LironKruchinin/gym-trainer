@@ -57,11 +57,26 @@ export class TraineesService {
   async syncFromBoostapp() {
     const apiUrl = this.config.get<string>('BOOSTAPP_API_URL');
     const apiKey = this.config.get<string>('BOOSTAPP_API_KEY');
-    if (!apiUrl || !apiKey) return [];
-    const resp = await fetch(`${apiUrl}/trainees`, {
-      headers: { Authorization: `Bearer ${apiKey}` },
-    });
-    const data = await resp.json();
+
+    let data: { name: string; reservedTime: string }[] = [];
+
+    if (apiUrl && apiKey) {
+      try {
+        const resp = await fetch(`${apiUrl}/trainees`, {
+          headers: { Authorization: `Bearer ${apiKey}` },
+        });
+        if (resp.ok) {
+          data = await resp.json();
+        }
+      } catch {
+        // fall back to scraping
+      }
+    }
+
+    if (!data.length) {
+      data = await this.scrapeFromBoostapp();
+    }
+
     for (const item of data) {
       const existing = await this.repo.findOne({
         where: { name: item.name, reservedTime: new Date(item.reservedTime) },
@@ -75,5 +90,24 @@ export class TraineesService {
       }
     }
     return this.findAll();
+  }
+
+  private async scrapeFromBoostapp() {
+    const pageUrl = this.config.get<string>('BOOSTAPP_SCRAPE_URL');
+    if (!pageUrl) return [];
+    try {
+      const resp = await fetch(pageUrl);
+      if (!resp.ok) return [];
+      const html = await resp.text();
+      const trainees: { name: string; reservedTime: string }[] = [];
+      const regex = /data-trainee-name="([^"]+)"\s+data-reserved-time="([^"]+)"/g;
+      let match: RegExpExecArray | null;
+      while ((match = regex.exec(html)) !== null) {
+        trainees.push({ name: match[1], reservedTime: match[2] });
+      }
+      return trainees;
+    } catch {
+      return [];
+    }
   }
 }
