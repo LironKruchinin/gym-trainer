@@ -24,8 +24,8 @@ export class User {
     @Column({ length: 100, nullable: true })
     last_name?: string;
 
-    @Column({ length: 255, unique: true })
-    email: string;
+    @Column({ length: 255, unique: true, nullable: true })
+    email?: string;
 
     @Column({ length: 20, nullable: true })
     phone_num?: string;
