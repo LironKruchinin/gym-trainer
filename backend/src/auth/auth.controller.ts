@@ -9,7 +9,7 @@ import {
 	UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { RateLimit } from 'common/decorators/rate-limit.decorator';
+import { RateLimit } from '../common/decorators/rate-limit.decorator';
 import { RateLimitGuard } from '../common/guard/rate-limit.guard';
 import { CreateUserDto } from '../modules/users/dto/create-user.dto';
 import { LoginDto } from '../modules/users/dto/login.dto';

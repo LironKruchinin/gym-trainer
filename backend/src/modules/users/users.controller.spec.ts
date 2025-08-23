@@ -1,41 +1,30 @@
-import { ItemsService } from './items.service';
-import { successResponse } from 'src/utils/success-response';
-import { NotFoundException } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
+import { UsersController } from './users.controller';
+import { UsersService } from './users.service';
+import { successResponse } from '../../utils/success-response';
 
-describe('ItemsController', () => {
-	let controller: ItemsController;
-	let service: jest.Mocked<ItemsService>;
+describe('UsersController', () => {
+  let controller: UsersController;
+  let svc: { create: jest.Mock };
 
-	beforeEach(() => {
-		service = {
-			create: jest.fn(),
-			findAll: jest.fn(),
-			findOne: jest.fn(),
-			update: jest.fn(),
-			remove: jest.fn(),
-			findByUser: jest.fn(),
-		} as any;
-		controller = new ItemsController(service);
-	});
+  beforeEach(async () => {
+    svc = { create: jest.fn() } as any;
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [UsersController],
+      providers: [{ provide: UsersService, useValue: svc }],
+    }).compile();
 
-	it('create wraps service result', async () => {
-		service.create.mockResolvedValue({ id: 1 });
-		const dto = { title: 't' } as any;
-		const res = await controller.create(dto);
-		expect(service.create).toHaveBeenCalledWith(dto);
-		expect(res).toEqual(successResponse('Item created', { id: 1 }));
-	});
+    controller = module.get<UsersController>(UsersController);
+  });
 
-	it('findMyItems uses logged user', async () => {
-		service.findByUser.mockResolvedValue([{ id: 2 } as any]);
-		const req = { user: { userId: 5 } };
-		const res = await controller.findMyItems(req as any);
-		expect(service.findByUser).toHaveBeenCalledWith(5);
-		expect(res).toEqual(successResponse('Your items fetched', [{ id: 2 }]));
-	});
+  it('should be defined', () => {
+    expect(controller).toBeDefined();
+  });
 
-	it('findOne rethrows not found', async () => {
-		service.findOne.mockRejectedValue(new NotFoundException());
-		await expect(controller.findOne('3')).rejects.toBeInstanceOf(NotFoundException);
-	});
+  it('create delegates to service and wraps response', async () => {
+    svc.create.mockResolvedValue({ id: 1 });
+    const result = await controller.create({} as any);
+    expect(svc.create).toHaveBeenCalled();
+    expect(result).toEqual(successResponse('User created successfully', { id: 1 }));
+  });
 });
