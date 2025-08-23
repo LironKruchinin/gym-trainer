@@ -5,13 +5,13 @@ import { useNavigate } from 'react-router-dom';
 
 interface Program {
     id: number;
-    traineeName: string;
+    name: string;
 }
 
 const seedPrograms: Program[] = [
-    { id: 1, traineeName: 'ג\'ן סמיתי' },
-    { id: 2, traineeName: 'שרה ג\'ונסון' },
-    { id: 3, traineeName: 'מייק וילסון' },
+    { id: 1, name: 'תוכנית כוח' },
+    { id: 2, name: 'תוכנית קרדיו' },
+    { id: 3, name: 'תוכנית שיקום' },
 ];
 
 export default function ProgramManagement() {
@@ -40,16 +40,16 @@ export default function ProgramManagement() {
 
     return (
         <div className="program-management container">
-            <h1 className="program-management__title">מנהל תוכניות אימונים</h1>
+            <h1 className="program-management__title">מנהל תוכניות אימון</h1>
             <p className="program-management__subtitle">
-                יצירה ועריכה של תוכניות אימון למתאמנים
+                יצירה ועריכה של תוכניות אימון כלליות
             </p>
 
             <ul className="program-management__list">
                 {programs.map((program) => (
                     <li key={program.id} className="program-management__item">
                         <span className="program-management__item-name">
-                            {program.traineeName}
+                            {program.name}
                         </span>
                         <div className="program-management__item-actions">
                             <button
