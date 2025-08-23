@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Exercise } from './entities/exercise.entity';
@@ -10,7 +10,7 @@ import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
 
 @Injectable()
-export class ExercisesService {
+export class ExercisesService implements OnModuleInit {
   constructor(
     @InjectRepository(Exercise)
     private readonly exerciseRepo: Repository<Exercise>,
@@ -29,8 +29,19 @@ export class ExercisesService {
     return this.exerciseRepo.save(e);
   }
 
-  findAll() {
-    return this.exerciseRepo.find({ relations: ['translations', 'videos'] });
+  async onModuleInit() {
+    const count = await this.exerciseRepo.count();
+    if (count === 0) {
+      await this.syncFromWger();
+    }
+  }
+
+  async findAll() {
+    const exercises = await this.exerciseRepo.find({ relations: ['translations', 'videos'] });
+    if (exercises.length === 0) {
+      return this.syncFromWger();
+    }
+    return exercises;
   }
 
   findOne(id: number) {
@@ -131,6 +142,6 @@ export class ExercisesService {
       await this.videoRepo.save(video);
     }
 
-    return this.findAll();
+    return this.exerciseRepo.find({ relations: ['translations', 'videos'] });
   }
 }
