@@ -13,7 +13,9 @@ export interface ProgressBarProps {
     animated?: boolean;       // animate stripes
     ariaLabel?: string;       // a11y label
     className?: string;       // extra className
-    style?: React.CSSProperties;
+    style?: React.CSSProperties & {
+        '--progress-value'?: string;
+    };
 }
 
 export default function ProgressBar({
@@ -50,7 +52,7 @@ export default function ProgressBar({
             aria-valuemin={0}
             aria-valuemax={safeMax}
             aria-valuenow={Math.round((pct * safeMax) / 100)}
-            style={{ ...style, ["--progress-value" as any]: `${pct}%` }}
+            style={{ ...style, '--progress-value': `${pct}%` }}
         >
             <div className="progress__bar">
                 {showLabel && (
