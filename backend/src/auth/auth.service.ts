@@ -5,11 +5,11 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from '../modules/users/dto/create-user.dto';
 import { LoginDto } from '../modules/users/dto/login.dto';
 import { User } from '../modules/users/entities/user.entity';
-import { GoogleUserDto } from './dto/google-user.dto.ts';
+import { GoogleUserDto } from './dto/google-user.dto';
 
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../modules/users/users.service';
-import { JwtBlacklistService } from './JwtBlacklistService.js';
+import { JwtBlacklistService } from './JwtBlacklistService';
 import { jwtConstants } from './constants';
 
 @Injectable()
@@ -23,19 +23,19 @@ export class AuthService {
 	) { }
 
 	async handleGoogleLogin(googleUser: GoogleUserDto): Promise<{ token: string }> {
-		let user = await this.userRepo.findOneBy({ email: googleUser.email, auth_provider: 'google' });
+                let user = await this.userRepo.findOneBy({ email: googleUser.email, auth_provider: 'google' });
 
-		if (!user) {
-			user = this.userRepo.create({
-				...googleUser,
-				subscription_status: 'free'
-			});
-			await this.userRepo.save(user);
-		}
-		const payload = {
-			sub: user.id,
-			email: user.email,
-		};
+                if (!user) {
+                        user = this.userRepo.create({
+                                ...googleUser,
+                                subscription_status: 'free'
+                        }) as User;
+                        await this.userRepo.save(user);
+                }
+                const payload = {
+                        sub: user!.id,
+                        email: user!.email,
+                };
 		const token = this.jwtService.sign(payload);
 		return { token };
 	}

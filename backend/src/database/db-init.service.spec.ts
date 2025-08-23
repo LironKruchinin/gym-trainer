@@ -12,7 +12,11 @@ describe('DbInitService', () => {
         } as any;
         const ds = { createQueryRunner: () => runner } as DataSource;
         const service = new DbInitService(ds as any);
-        (service as any).tables = { a: 'CREATE A;', b: 'CREATE B;' };
+        (service as any).tables = [
+            { tbl_name: 'a', dependencies: [] },
+            { tbl_name: 'b', dependencies: [] },
+        ];
+        (service as any).tableDefinitions = { a: 'CREATE A;', b: 'CREATE B;' };
         await service.onModuleInit();
         expect(runner.connect).toHaveBeenCalled();
         expect(queries).toContain('CREATE A;');

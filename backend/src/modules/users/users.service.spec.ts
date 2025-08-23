@@ -16,13 +16,16 @@ function repoMock<T extends ObjectLiteral>() {
 }
 
 describe('UsersService', () => {
-	let service: UsersService;
-	let repo: jest.Mocked<Repository<any>>;
+        let service: UsersService;
+        let repo: jest.Mocked<Repository<any>>;
+        let roleRepo: jest.Mocked<Repository<any>>;
 
-	beforeEach(() => {
-		repo = repoMock();
-		service = new UsersService(repo as any);
-	});
+        beforeEach(() => {
+                repo = repoMock();
+                roleRepo = repoMock();
+                roleRepo.findOneBy.mockResolvedValue({ id: 1 } as any);
+                service = new UsersService(repo as any, roleRepo as any);
+        });
 
 	it('create throws if duplicate email', async () => {
 		repo.create.mockReturnValue({} as any);
