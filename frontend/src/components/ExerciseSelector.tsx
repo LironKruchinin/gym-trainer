@@ -13,7 +13,7 @@ export default function ExerciseSelector({ value, onChange }: Props) {
 
     useEffect(() => {
         const fetchExercises = async () => {
-            const apiUrl = "http://localhost:3001";
+            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
             if (!apiUrl) {
                 console.error('VITE_API_URL is missing');
                 return;
@@ -41,8 +41,13 @@ export default function ExerciseSelector({ value, onChange }: Props) {
                     );
                 }
 
-                const data: Array<{ name?: string | null }> = await res.json();
-                const names = (data || []).map((e) => sanitize(e?.name)).filter(Boolean) as string[];
+                const data: Array<{ name?: string | null; translations?: Array<{ name?: string | null; language?: number }> }> = await res.json();
+                const names = (data || [])
+                    .map((e) => {
+                        const t = e.translations?.find((tr) => tr.language === 2 || tr.language === 21);
+                        return sanitize(t?.name || e?.name);
+                    })
+                    .filter(Boolean) as string[];
                 setOptions(names);
             } catch (err) {
                 console.error('Failed to load exercises:', err);
