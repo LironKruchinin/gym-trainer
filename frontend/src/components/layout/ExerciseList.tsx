@@ -53,3 +53,4 @@ export default function ExerciseList({ exercises = [] }: { exercises: Exercise[]
         </>
     );
 }
+
