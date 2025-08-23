@@ -10,7 +10,8 @@ interface Props {
 
 export default function SearchableSelect({ options, value, onChange, placeholder, inputClassName }: Props) {
     const [open, setOpen] = useState(false);
-    const filtered = options.filter((opt) => opt.toLowerCase().includes(value.toLowerCase()));
+    const uniqueOptions = Array.from(new Set(options));
+    const filtered = uniqueOptions.filter((opt) => opt.toLowerCase().includes(value.toLowerCase()));
 
     const handleSelect = (opt: string) => {
         onChange(opt);

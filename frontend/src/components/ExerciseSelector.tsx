@@ -44,11 +44,12 @@ export default function ExerciseSelector({ value, onChange }: Props) {
                 const data: Array<{ name?: string | null; translations?: Array<{ name?: string | null; language?: number }> }> = await res.json();
                 const names = (data || [])
                     .map((e) => {
-                        const t = e.translations?.find((tr) => tr.language === 2 || tr.language === 21);
-                        return sanitize(t?.name || e?.name);
+                        const heb = e.translations?.find((tr) => tr.language === 21);
+                        const other = e.translations?.find((tr) => tr.language === 2);
+                        return sanitize(heb?.name || other?.name || e?.name);
                     })
                     .filter(Boolean) as string[];
-                setOptions(names);
+                setOptions(Array.from(new Set(names)));
             } catch (err) {
                 console.error('Failed to load exercises:', err);
                 setOptions([]); // fail safe
@@ -56,6 +57,17 @@ export default function ExerciseSelector({ value, onChange }: Props) {
         };
         fetchExercises();
     }, []);
+
+    useEffect(() => {
+        if (value) {
+            setOptions((prev) => {
+                if (prev.includes(value)) {
+                    return prev;
+                }
+                return [...prev, value];
+            });
+        }
+    }, [value]);
 
     return (
         <SearchableSelect
