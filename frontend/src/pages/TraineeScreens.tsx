@@ -54,6 +54,3 @@ export default function TraineeScreens() {
                     </div>
                 ))}
             </div>
-        </div>
-    );
-}
