@@ -23,7 +23,8 @@ export async function createProgram(program: Program) {
             rest: sanitize(e.rest),
         })),
     };
-    const res = await fetch('/api/training-programs', {
+    const apiUrl = import.meta.env.VITE_API_URL;
+    const res = await fetch(`${apiUrl}/training-programs`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(sanitized),
