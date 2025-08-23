@@ -2,36 +2,29 @@ import { faPen, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-interface Program {
-    id: number;
-    name: string;
-}
-
-const seedPrograms: Program[] = [
-    { id: 1, name: 'תוכנית כוח' },
-    { id: 2, name: 'תוכנית קרדיו' },
-    { id: 3, name: 'תוכנית שיקום' },
-];
+import {
+    getPrograms,
+    deleteProgram,
+    type Program,
+} from '../services/trainingPrograms';
 
 export default function ProgramManagement() {
     const navigate = useNavigate();
     const [programs, setPrograms] = useState<Program[]>([]);
 
     useEffect(() => {
-        const stored = localStorage.getItem('programs');
-        if (stored) {
-            setPrograms(JSON.parse(stored));
-        } else {
-            localStorage.setItem('programs', JSON.stringify(seedPrograms));
-            setPrograms(seedPrograms);
-        }
+        getPrograms()
+            .then(setPrograms)
+            .catch((err) => console.error(err));
     }, []);
 
-    const removeProgram = (id: number) => {
-        const updated = programs.filter((p) => p.id !== id);
-        setPrograms(updated);
-        localStorage.setItem('programs', JSON.stringify(updated));
+    const removeProgram = async (id: number) => {
+        try {
+            await deleteProgram(id);
+            setPrograms((prev) => prev.filter((p) => p.id !== id));
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     const startEdit = (id?: number) => {

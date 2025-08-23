@@ -1,10 +1,6 @@
 import { useEffect, useState } from 'react';
 import SearchableSelect from './ui/SearchableSelect';
-
-interface Program {
-    id: number;
-    name: string;
-}
+import { getPrograms, type Program } from '../services/trainingPrograms';
 
 interface Props {
     isOpen: boolean;
@@ -18,8 +14,9 @@ export default function TrainingProgramModal({ isOpen, onClose }: Props) {
 
     useEffect(() => {
         if (isOpen) {
-            const stored = localStorage.getItem('programs');
-            if (stored) setPrograms(JSON.parse(stored));
+            getPrograms()
+                .then(setPrograms)
+                .catch((err) => console.error(err));
         }
     }, [isOpen]);
 
