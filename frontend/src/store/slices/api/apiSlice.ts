@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { Post } from './Post';
+import type { Trainee } from './Trainee';
+import type { TrainingLog } from './TrainingLog';
 
 // 1️⃣ Define your “base” config
 export const api = createApi({
@@ -13,9 +15,8 @@ export const api = createApi({
             return headers;
         },
     }),
-    tagTypes: ['Post'],                         // for cache invalidation
+    tagTypes: ['Post', 'Trainee', 'TrainingLog'],                         // for cache invalidation
     endpoints: (build) => ({
-        // 2️⃣ A “getPosts” endpoint
         getPosts: build.query<Post[], void>({
             query: () => '/posts',
             providesTags: (result) =>
@@ -23,7 +24,6 @@ export const api = createApi({
                     ? [...result.map(({ id }) => ({ type: 'Post' as const, id })), { type: 'Post', id: 'LIST' }]
                     : [{ type: 'Post', id: 'LIST' }],
         }),
-        // 3️⃣ A “addPost” mutation
         addPost: build.mutation<Post, Partial<Post>>({
             query: (newPost) => ({
                 url: '/posts',
@@ -32,8 +32,50 @@ export const api = createApi({
             }),
             invalidatesTags: [{ type: 'Post', id: 'LIST' }],
         }),
+        getTrainees: build.query<Trainee[], void>({
+            query: () => '/trainees',
+            providesTags: (result) =>
+                result
+                    ? [
+                          ...result.map(({ id }) => ({ type: 'Trainee' as const, id })),
+                          { type: 'Trainee', id: 'LIST' },
+                      ]
+                    : [{ type: 'Trainee', id: 'LIST' }],
+        }),
+        syncTrainees: build.mutation<Trainee[], void>({
+            query: () => ({ url: '/trainees/sync', method: 'POST' }),
+            invalidatesTags: [{ type: 'Trainee', id: 'LIST' }],
+        }),
+        assignProgram: build.mutation<
+            Trainee,
+            { id: number; programId: number }
+        >({
+            query: ({ id, programId }) => ({
+                url: `/trainees/${id}/program`,
+                method: 'PATCH',
+                body: { programId },
+            }),
+            invalidatesTags: (res, err, { id }) => [{ type: 'Trainee', id }],
+        }),
+        logTraining: build.mutation<
+            TrainingLog,
+            {
+                traineeId: number;
+                programId: number;
+                details?: Record<string, unknown>;
+            }
+        >({
+            query: (body) => ({ url: '/training-logs', method: 'POST', body }),
+            invalidatesTags: [{ type: 'TrainingLog', id: 'LIST' }],
+        }),
     }),
 });
 
-// 4️⃣ Export auto-generated hooks
-export const { useGetPostsQuery, useAddPostMutation } = api;
+export const {
+    useGetPostsQuery,
+    useAddPostMutation,
+    useGetTraineesQuery,
+    useSyncTraineesMutation,
+    useAssignProgramMutation,
+    useLogTrainingMutation,
+} = api;
