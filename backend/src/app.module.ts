@@ -9,17 +9,18 @@ import { TrainingProgramsModule } from './modules/training-programs/training-pro
 import { TraineesModule } from './modules/trainees/trainees.module';
 import { TrainingLogsModule } from './modules/training-logs/training-logs.module';
 
+
 @Module({
 	imports: [
 		AppConfigModule,
 		DatabaseModule,
-                CommonModule,
-                UsersModule,
-                AuthModule,
-                SessionsModule,
-                TrainingProgramsModule,
-                TraineesModule,
-                TrainingLogsModule,
+    CommonModule,
+    UsersModule,
+    AuthModule,
+    SessionsModule,
+    TrainingProgramsModule,
+    TraineesModule,
+    TrainingLogsModule,
         ],
 	controllers: [],
 	providers: [],
