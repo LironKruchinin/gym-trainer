@@ -4,9 +4,11 @@ import ProgressBar from '../ui/ProgressBar';
 
 interface Exercise {
     name: string;
-    sets?: string;
-    weight?: string;
+    sets?: number | string;
+    reps?: number | string;
+    weight?: number | string;
     rest?: string;
+    notes?: string;
 }
 
 interface Props {

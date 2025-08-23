@@ -2,9 +2,11 @@ import React from 'react';
 
 interface Exercise {
     name: string;
-    sets?: string;
-    weight?: string;
+    sets?: number | string;
+    reps?: number | string;
+    weight?: number | string;
     rest?: string;
+    notes?: string;
 }
 
 export default function ExerciseList({ exercises = [] }: { exercises: Exercise[] }) {
@@ -18,20 +20,33 @@ export default function ExerciseList({ exercises = [] }: { exercises: Exercise[]
                     </div>
 
                     <ul className="exercise__details">
-                        <li className="exercise__item exercise__item--sets">
-                            <span className="exercise__label">סטים:</span>
-                            <span className="exercise__value">{ex.sets}</span>
-                        </li>
+                        {ex.sets !== undefined && (
+                            <li className="exercise__item exercise__item--sets">
+                                <span className="exercise__label">סטים:</span>
+                                <span className="exercise__value">{ex.sets}</span>
+                            </li>
+                        )}
 
-                        <li className="exercise__item exercise__item--weight">
-                            <span className="exercise__label">משקל:</span>
-                            <span className="exercise__value">{ex.weight}</span>
-                        </li>
+                        {ex.reps !== undefined && (
+                            <li className="exercise__item exercise__item--reps">
+                                <span className="exercise__label">חזרות:</span>
+                                <span className="exercise__value">{ex.reps}</span>
+                            </li>
+                        )}
 
-                        <li className="exercise__item exercise__item--rest">
-                            <span className="exercise__label">מנוחה:</span>
-                            <span className="exercise__value">{ex.rest}</span>
-                        </li>
+                        {ex.weight !== undefined && (
+                            <li className="exercise__item exercise__item--weight">
+                                <span className="exercise__label">משקל:</span>
+                                <span className="exercise__value">{ex.weight}</span>
+                            </li>
+                        )}
+
+                        {ex.rest && (
+                            <li className="exercise__item exercise__item--rest">
+                                <span className="exercise__label">מנוחה:</span>
+                                <span className="exercise__value">{ex.rest}</span>
+                            </li>
+                        )}
                     </ul>
                 </div>
             ))}
