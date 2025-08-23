@@ -1,16 +1,36 @@
 import TraineeAttendance from '@components/layout/TraineeAttendance';
 import { faCalendar, faGear, faPlay, faTv } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
-    const [currentTime, setCurrentTime] = useState("");
+    const navigate = useNavigate();
+    const [currentTime, setCurrentTime] = useState('');
 
     const userOptions = [
-        { title: "מסכי מתאמנים", subtitle: "הצגת כל המתאמנים בתצוגה אחידה", icon: faTv, action: () => console.log("Settings clicked"), iconColor: "#007bff" },
-        { title: "מצב הפעלה אוטומטית", subtitle: "מחזוריות אוטומטית בין כל המתאמנים", icon: faPlay, action: () => console.log("Settings clicked"), iconColor: "#9238d5" },
-        { title: "ניהול תוכניות", subtitle: "עריכת תוכניות אימונים ולוחות זמנים", icon: faGear, action: () => console.log("Settings clicked"), iconColor: "#1d9e59" },
-    ]
+        {
+            title: 'מסכי מתאמנים',
+            subtitle: 'הצגת כל המתאמנים בתצוגה אחידה',
+            icon: faTv,
+            action: () => navigate('/trainees'),
+            iconColor: '#007bff',
+        },
+        {
+            title: 'מצב הפעלה אוטומטית',
+            subtitle: 'מחזוריות אוטומטית בין כל המתאמנים',
+            icon: faPlay,
+            action: () => navigate('/auto-mode'),
+            iconColor: '#9238d5',
+        },
+        {
+            title: 'ניהול תוכניות',
+            subtitle: 'עריכת תוכניות אימונים ולוחות זמנים',
+            icon: faGear,
+            action: () => navigate('/programs'),
+            iconColor: '#1d9e59',
+        },
+    ];
 
     useEffect(() => {
         const updateClock = () => {
