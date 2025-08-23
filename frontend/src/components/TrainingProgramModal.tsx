@@ -12,6 +12,8 @@ interface Props {
 
 export default function TrainingProgramModal({ isOpen, onClose }: Props) {
     const [programs, setPrograms] = useState<Program[]>([]);
+    const [selection, setSelection] = useState('');
+    const trainingOptions = ['כוח', 'קרדיו', 'גמישות'];
 
     useEffect(() => {
         if (isOpen) {
@@ -27,6 +29,21 @@ export default function TrainingProgramModal({ isOpen, onClose }: Props) {
             <div className="training-program-modal__header">
                 <h2>תוכניות אימון</h2>
                 <button onClick={onClose}>סגור</button>
+            </div>
+            <div className="training-program-modal__controls">
+                <button className="training-program-modal__reschedule">העבר תור</button>
+                <input
+                    className="training-program-modal__input"
+                    list="training-options"
+                    value={selection}
+                    onChange={(e) => setSelection(e.target.value)}
+                    placeholder="בחר סוג אימון"
+                />
+                <datalist id="training-options">
+                    {trainingOptions.map((opt) => (
+                        <option key={opt} value={opt} />
+                    ))}
+                </datalist>
             </div>
             <ul className="training-program-modal__list">
                 {programs.map((p) => (

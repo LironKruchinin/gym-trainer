@@ -1,10 +1,10 @@
-import React from 'react';
+import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faClock } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom';
+import TrainingProgramModal from '../TrainingProgramModal';
 
 function TraineeAttendance() {
-    const navigate = useNavigate();
+    const [open, setOpen] = useState(false);
     return (
         <div className="trainee-attendance">
             <div className="trainee-attendance__details">
@@ -25,10 +25,11 @@ function TraineeAttendance() {
             </div>
             <button
                 className="trainee-attendance__action"
-                onClick={() => navigate('/training')}
+                onClick={() => setOpen(true)}
             >
                 <span className="trainee-attendance__action-text">פתח מסך אימון</span>
             </button>
+            <TrainingProgramModal isOpen={open} onClose={() => setOpen(false)} />
         </div>
     );
 }

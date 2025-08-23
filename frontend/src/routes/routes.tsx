@@ -4,7 +4,6 @@ import ProgramManagement from '../pages/ProgramManagement';
 import ProgramEdit from '../pages/ProgramEdit';
 import TraineeScreens from '../pages/TraineeScreens';
 import AutoMode from '../pages/AutoMode';
-import TrainingWindow from '../pages/TrainingWindow';
 import type { RouteObject } from 'react-router-dom';
 
 const routes: RouteObject[] = [
@@ -15,7 +14,6 @@ const routes: RouteObject[] = [
     { path: '/programs/:id', element: <ProgramEdit /> },
     { path: '/trainees', element: <TraineeScreens /> },
     { path: '/auto-mode', element: <AutoMode /> },
-    { path: '/training', element: <TrainingWindow /> },
 ];
 
 export default routes;

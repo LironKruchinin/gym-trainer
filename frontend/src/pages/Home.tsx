@@ -3,7 +3,6 @@ import { faCalendar, faGear, faPlay, faTv } from '@fortawesome/free-solid-svg-ic
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import TraineeScreens from './TraineeScreens';
 
 export default function Home() {
     const navigate = useNavigate();

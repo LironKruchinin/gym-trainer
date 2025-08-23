@@ -18,6 +18,23 @@
     margin-bottom: 1rem;
 }
 
+.training-program-modal__controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.training-program-modal__reschedule {
+    align-self: flex-start;
+}
+
+.training-program-modal__input {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
 .training-program-modal__list {
     flex: 1;
     overflow-y: auto;
