@@ -6,7 +6,7 @@ interface Props {
     onChange: (val: string) => void;
 }
 
-const sanitize = (v: string) => v.replace(/<[^>]*>?/gm, '').trim();
+const sanitize = (v?: string | null) => (v ?? '').replace(/<[^>]*>?/gm, '').trim();
 
 export default function ExerciseSelector({ value, onChange }: Props) {
     const [options, setOptions] = useState<string[]>([]);
@@ -14,11 +14,11 @@ export default function ExerciseSelector({ value, onChange }: Props) {
     useEffect(() => {
         const fetchExercises = async () => {
             try {
-                const res = await fetch(
-                    'https://wger.de/api/v2/exercise/?language=21&limit=2000'
-                );
+                const res = await fetch('/api/exercises');
                 const data = await res.json();
-                const names = (data.results || []).map((e: any) => sanitize(e.name));
+                const names = (data || [])
+                    .map((e: any) => sanitize(e.name))
+                    .filter(Boolean);
                 setOptions(names);
             } catch (err) {
                 console.error('Failed to load exercises', err);
