@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { Post } from './Post';
 import type { Trainee } from './Trainee';
 import type { TrainingLog } from './TrainingLog';
+import type { Exercise } from './Exercise';
 
 // 1️⃣ Define your “base” config
 export const api = createApi({
@@ -15,7 +16,7 @@ export const api = createApi({
             return headers;
         },
     }),
-    tagTypes: ['Post', 'Trainee', 'TrainingLog'],                         // for cache invalidation
+    tagTypes: ['Post', 'Trainee', 'TrainingLog', 'Exercise'],                         // for cache invalidation
     endpoints: (build) => ({
         getPosts: build.query<Post[], void>({
             query: () => '/posts',
@@ -68,6 +69,20 @@ export const api = createApi({
             query: (body) => ({ url: '/training-logs', method: 'POST', body }),
             invalidatesTags: [{ type: 'TrainingLog', id: 'LIST' }],
         }),
+        getExercises: build.query<Exercise[], void>({
+            query: () => '/exercises',
+            providesTags: (result) =>
+                result
+                    ? [
+                          ...result.map(({ id }) => ({ type: 'Exercise' as const, id })),
+                          { type: 'Exercise', id: 'LIST' },
+                      ]
+                    : [{ type: 'Exercise', id: 'LIST' }],
+        }),
+        syncExercises: build.mutation<Exercise[], void>({
+            query: () => ({ url: '/exercises/sync', method: 'POST' }),
+            invalidatesTags: [{ type: 'Exercise', id: 'LIST' }],
+        }),
     }),
 });
 
@@ -78,4 +93,6 @@ export const {
     useSyncTraineesMutation,
     useAssignProgramMutation,
     useLogTrainingMutation,
+    useGetExercisesQuery,
+    useSyncExercisesMutation,
 } = api;
