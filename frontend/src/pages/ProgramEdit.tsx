@@ -16,7 +16,7 @@ interface LocalProgram extends Program {
     id?: number;
 }
 
-const sanitize = (v: string) => v.replace(/<[^>]*>?/gm, '').trim();
+const sanitize = (v: string) => v.replace(/<[^>]*>?/gm, '');
 
 export default function ProgramEdit() {
     const navigate = useNavigate();

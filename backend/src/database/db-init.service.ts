@@ -158,6 +158,7 @@ export class DbInitService implements OnModuleInit {
     exercise_translations: `
       CREATE TABLE exercise_translations (
         id SERIAL PRIMARY KEY,
+        wger_id INTEGER UNIQUE NOT NULL,
         exercise_id INTEGER REFERENCES exercises(id) ON DELETE CASCADE,
         language INTEGER NOT NULL,
         name VARCHAR(200) NOT NULL,

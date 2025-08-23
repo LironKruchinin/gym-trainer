@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, Index } from 'typeorm';
 import { Exercise } from './exercise.entity';
 
 @Entity()
@@ -6,6 +6,7 @@ export class ExerciseVideo {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Index('idx_video_wger_id')
     @Column({ unique: true })
     wgerId: number;
 

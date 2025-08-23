@@ -37,7 +37,11 @@ export class ExercisesService implements OnModuleInit {
   }
 
   async findAll() {
-    const exercises = await this.exerciseRepo.find({ relations: ['translations', 'videos'] });
+    const exercises = await this.exerciseRepo
+      .createQueryBuilder('e')
+      .leftJoinAndSelect('e.translations', 't', 't.language IN (:...langs)', { langs: [21, 2] })
+      .leftJoinAndSelect('e.videos', 'v')
+      .getMany();
     if (exercises.length === 0) {
       return this.syncFromWger();
     }
@@ -102,15 +106,18 @@ export class ExercisesService implements OnModuleInit {
     for (const t of trData.results ?? []) {
       const exercise = await this.exerciseRepo.findOne({ where: { wgerId: t.exercise } });
       if (!exercise) continue;
-      let translation = await this.translationRepo.findOne({ where: { exercise: { id: exercise.id }, language: t.language } });
+      let translation = await this.translationRepo.findOne({ where: { wgerId: t.id } });
       if (!translation) {
         translation = this.translationRepo.create({
+          wgerId: t.id,
           exercise,
           language: t.language,
           name: t.name,
           description: t.description,
         });
       } else {
+        translation.exercise = exercise;
+        translation.language = t.language;
         translation.name = t.name;
         translation.description = t.description;
       }
