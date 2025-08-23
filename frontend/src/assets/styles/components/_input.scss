@@ -1,0 +1,17 @@
+@use '../abstracts' as *;
+
+input {
+    padding: $space-unit * 1.5;
+    border: 1px solid $color-border;
+    border-radius: $radius;
+    font-size: $base-font;
+    box-sizing: border-box;
+
+    &.input--success {
+        border-color: $color-success;
+    }
+
+    &.input--error {
+        border-color: $color-error;
+    }
+}
