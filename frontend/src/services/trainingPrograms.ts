@@ -11,22 +11,26 @@ export interface Exercise {
 export interface Program {
     name: string;
     exercises: Exercise[];
+    description?: string;
     difficultyLevel?: 'beginner' | 'intermediate' | 'advanced';
     workoutType?: string;
+    isTemplate?: boolean;
 }
 
 export async function createProgram(program: Program) {
     const sanitized = {
         ...program,
         name: sanitize(program.name),
+        description: program.description ? sanitize(program.description) : undefined,
         difficultyLevel: program.difficultyLevel ?? 'beginner',
-        workoutType: program.workoutType ?? 'general',
+        workoutType: sanitize(program.workoutType ?? 'general'),
+        isTemplate: program.isTemplate ?? true,
         exercises: program.exercises.map((e) => ({
             name: sanitize(e.name),
             sets: Number(sanitize(e.sets)) || 1,
             reps: sanitize(e.reps),
             weight: sanitize(e.weight),
-            notes: sanitize(e.rest),
+            rest: sanitize(e.rest),
         })),
     };
     const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';

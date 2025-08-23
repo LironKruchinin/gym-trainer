@@ -8,7 +8,6 @@ interface Exercise {
     reps?: number | string;
     weight?: number | string;
     rest?: string;
-    notes?: string;
 }
 
 interface Props {

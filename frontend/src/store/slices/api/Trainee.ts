@@ -3,7 +3,7 @@ export interface ProgramExercise {
     sets: number;
     reps: string;
     weight: string;
-    notes?: string;
+    rest?: string;
 }
 
 export interface TrainingProgram {

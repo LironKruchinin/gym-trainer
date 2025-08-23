@@ -25,6 +25,10 @@ export default function ProgramEdit() {
     const id = params.id ? Number(sanitize(params.id)) : undefined;
     const [program, setProgram] = useState<LocalProgram>({
         name: '',
+        description: '',
+        difficultyLevel: 'beginner',
+        workoutType: '',
+        isTemplate: true,
         exercises: [{ name: '', sets: '', reps: '', weight: '', rest: '' }],
     });
 
@@ -53,7 +57,13 @@ export default function ProgramEdit() {
     const saveProgram = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await createProgram({ name: sanitize(program.name), exercises: program.exercises });
+            await createProgram({
+                ...program,
+                name: sanitize(program.name),
+                description: sanitize(program.description || ''),
+                workoutType: sanitize(program.workoutType),
+                exercises: program.exercises,
+            });
             navigate('/programs');
         } catch (err) {
             console.error(err);
@@ -72,6 +82,56 @@ export default function ProgramEdit() {
                         value={program.name}
                         onChange={(e) => setProgram({ ...program, name: sanitize(e.target.value) })}
                         required
+                    />
+                </label>
+
+                <label className="program-edit__field">
+                    <span className="program-edit__label">תיאור</span>
+                    <textarea
+                        className="program-edit__input"
+                        value={program.description}
+                        onChange={(e) => setProgram({ ...program, description: sanitize(e.target.value) })}
+                    />
+                </label>
+
+                <label className="program-edit__field">
+                    <span className="program-edit__label">רמת קושי</span>
+                    <select
+                        className="program-edit__input"
+                        value={program.difficultyLevel}
+                        onChange={(e) =>
+                            setProgram({
+                                ...program,
+                                difficultyLevel: e.target.value as
+                                    | 'beginner'
+                                    | 'intermediate'
+                                    | 'advanced',
+                            })
+                        }
+                    >
+                        <option value="beginner">מתחיל</option>
+                        <option value="intermediate">בינוני</option>
+                        <option value="advanced">מתקדם</option>
+                    </select>
+                </label>
+
+                <label className="program-edit__field">
+                    <span className="program-edit__label">סוג אימון</span>
+                    <input
+                        className="program-edit__input"
+                        value={program.workoutType}
+                        onChange={(e) =>
+                            setProgram({ ...program, workoutType: sanitize(e.target.value) })
+                        }
+                    />
+                </label>
+
+                <label className="program-edit__field">
+                    <span className="program-edit__label">תבנית?</span>
+                    <input
+                        type="checkbox"
+                        checked={program.isTemplate}
+                        onChange={(e) => setProgram({ ...program, isTemplate: e.target.checked })}
                     />
                 </label>
 
