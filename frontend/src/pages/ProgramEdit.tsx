@@ -2,6 +2,7 @@ import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import ExerciseSelector from '../components/ExerciseSelector';
 
 interface Exercise {
     name: string;
@@ -12,7 +13,7 @@ interface Exercise {
 
 interface Program {
     id?: number;
-    traineeName: string;
+    name: string;
     exercises: Exercise[];
 }
 
@@ -20,10 +21,8 @@ export default function ProgramEdit() {
     const navigate = useNavigate();
     const { id } = useParams();
     const [program, setProgram] = useState<Program>({
-        traineeName: '',
-        exercises: [
-            { name: '', sets: '', weight: '', rest: '' },
-        ],
+        name: '',
+        exercises: [{ name: '', sets: '', weight: '', rest: '' }],
     });
 
     useEffect(() => {
@@ -79,14 +78,14 @@ export default function ProgramEdit() {
 
     return (
         <div className="program-edit container">
-            <h1 className="program-edit__title">עריכת תוכנית אימונים עבור {program.traineeName || 'מתאמן'}</h1>
+            <h1 className="program-edit__title">עריכת תוכנית אימונים עבור {program.name || 'תוכנית חדשה'}</h1>
             <form className="program-edit__form" onSubmit={saveProgram}>
                 <label className="program-edit__field">
-                    <span className="program-edit__label">שם המתאמן</span>
+                    <span className="program-edit__label">שם התוכנית</span>
                     <input
                         className="program-edit__input"
-                        value={program.traineeName}
-                        onChange={(e) => setProgram({ ...program, traineeName: e.target.value })}
+                        value={program.name}
+                        onChange={(e) => setProgram({ ...program, name: e.target.value })}
                         required
                     />
                 </label>
@@ -95,11 +94,9 @@ export default function ProgramEdit() {
                     <div key={idx} className="program-edit__exercise">
                         <label className="program-edit__field">
                             <span className="program-edit__label">שם התרגיל</span>
-                            <input
-                                className="program-edit__input"
+                            <ExerciseSelector
                                 value={exercise.name}
-                                onChange={(e) => updateExercise(idx, 'name', e.target.value)}
-                                required
+                                onChange={(val) => updateExercise(idx, 'name', val)}
                             />
                         </label>
                         <label className="program-edit__field">
@@ -145,9 +142,11 @@ export default function ProgramEdit() {
                 </button>
 
                 <div className="program-edit__actions">
+                    <button type="button" className="program-edit__cancel" onClick={() => navigate('/programs')}>ביטול</button>
                     <button type="submit" className="program-edit__save">שמור</button>
                 </div>
             </form>
         </div>
     );
 }
+
