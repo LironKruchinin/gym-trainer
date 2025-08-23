@@ -1,9 +1,22 @@
-import { IsString, IsEnum, IsOptional, IsArray, ValidateNested, IsBoolean } from 'class-validator';
+import {
+    IsString,
+    IsEnum,
+    IsOptional,
+    IsArray,
+    ValidateNested,
+    IsBoolean,
+    IsInt,
+    Min,
+    Max,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 class ProgramExerciseDto {
     @IsString() name: string;
-    @IsEnum(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'], { each: false, message: 'sets must be a number' })
+    @Type(() => Number)
+    @IsInt({ message: 'sets must be a number' })
+    @Min(1)
+    @Max(10)
     sets: number;
     @IsString() reps: string;
     @IsString() weight: string;
