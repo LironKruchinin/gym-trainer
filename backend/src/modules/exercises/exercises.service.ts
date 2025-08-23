@@ -49,7 +49,12 @@ export class ExercisesService implements OnModuleInit {
   }
 
   findOne(id: number) {
-    return this.exerciseRepo.findOneOrFail({ where: { id }, relations: ['translations', 'videos'] });
+    return this.exerciseRepo
+      .createQueryBuilder('e')
+      .leftJoinAndSelect('e.translations', 't', 't.language IN (:...langs)', { langs: [21, 2] })
+      .leftJoinAndSelect('e.videos', 'v')
+      .where('e.id = :id', { id })
+      .getOneOrFail();
   }
 
   async update(id: number, dto: UpdateExerciseDto) {
@@ -104,6 +109,7 @@ export class ExercisesService implements OnModuleInit {
     }
 
     for (const t of trData.results ?? []) {
+      if (![21, 2].includes(t.language)) continue;
       const exercise = await this.exerciseRepo.findOne({ where: { wgerId: t.exercise } });
       if (!exercise) continue;
       let translation = await this.translationRepo.findOne({ where: { wgerId: t.id } });
