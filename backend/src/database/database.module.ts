@@ -17,7 +17,8 @@ import { DbInitService } from './db-init.service';
                     url: db.url,
                     ssl: db.ssl ? { rejectUnauthorized: false } : false,
                     entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-                    synchronize: false,          // we’re managing tables by hand now
+                    synchronize: true,                 // you’re creating tables by hand
+                    logging: ['error', 'warn', 'schema', 'query'], // <- see what’s happening
                 };
             },
         }),

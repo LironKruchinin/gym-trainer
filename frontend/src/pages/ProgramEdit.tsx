@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ExerciseSelector from '../components/ExerciseSelector';
-import { createProgram, Program } from '../services/trainingPrograms';
+import { createProgram, type Program } from '../services/trainingPrograms';
 
 interface Exercise {
     name: string;

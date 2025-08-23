@@ -9,7 +9,7 @@ export type ExerciseCategory =
     | 'gymnastics'
     | 'accessory';
 
-@Entity()
+@Entity({ name: 'exercises' })
 export class Exercise {
     @PrimaryGeneratedColumn()
     id: number;

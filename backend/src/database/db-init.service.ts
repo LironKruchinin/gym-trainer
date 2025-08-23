@@ -3,11 +3,11 @@ import { DataSource } from 'typeorm';
 
 @Injectable()
 export class DbInitService implements OnModuleInit {
-	private readonly logger = new Logger(DbInitService.name);
+  private readonly logger = new Logger(DbInitService.name);
 
-	// define your tables + creation SQL here
-	private readonly tableDefinitions: Record<string, string> = {
-		users: `
+  // define your tables + creation SQL here
+  private readonly tableDefinitions: Record<string, string> = {
+    users: `
       CREATE TABLE users (
         id SERIAL PRIMARY KEY,
         first_name VARCHAR(100),
@@ -31,11 +31,10 @@ export class DbInitService implements OnModuleInit {
         updated_at TIMESTAMP DEFAULT now()
       );
     `,
-		notifications: `
+    notifications: `
       CREATE TABLE notifications (
         id SERIAL PRIMARY KEY,
         user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-        item_id INTEGER REFERENCES items(id) ON DELETE CASCADE,
         type VARCHAR(50) NOT NULL,
         status VARCHAR(20) DEFAULT 'pending',
         scheduled_at TIMESTAMP NOT NULL,
@@ -46,7 +45,7 @@ export class DbInitService implements OnModuleInit {
       CREATE INDEX idx_notifications_user_id ON notifications(user_id);
       CREATE INDEX idx_notifications_scheduled_at ON notifications(scheduled_at);
     `,
-		tags: `
+    tags: `
       CREATE TABLE tags (
         id SERIAL PRIMARY KEY,
         name VARCHAR(50) UNIQUE NOT NULL,
@@ -56,7 +55,7 @@ export class DbInitService implements OnModuleInit {
         updated_at TIMESTAMP DEFAULT now()
       );
     `,
-		otp_codes: `
+    otp_codes: `
       CREATE TABLE otp_codes (
         id SERIAL PRIMARY KEY,
         phone VARCHAR(20) NOT NULL,
@@ -69,7 +68,7 @@ export class DbInitService implements OnModuleInit {
       );
       CREATE INDEX idx_otp_phone ON otp_codes(phone);
     `,
-		rate_limit_logs: `
+    rate_limit_logs: `
       CREATE TABLE rate_limit_logs (
         id SERIAL PRIMARY KEY,
         ip_address TEXT NOT NULL,
@@ -85,7 +84,7 @@ export class DbInitService implements OnModuleInit {
       CREATE INDEX idx_rate_limit_logs_ip ON rate_limit_logs(ip_address);
       CREATE INDEX idx_rate_limit_logs_endpoint ON rate_limit_logs(endpoint);
     `,
-		jwt_blacklist: `
+    jwt_blacklist: `
       CREATE TABLE jwt_blacklist (
         id SERIAL PRIMARY KEY,
         token TEXT NOT NULL,
@@ -93,7 +92,7 @@ export class DbInitService implements OnModuleInit {
         created_at TIMESTAMP DEFAULT now()
       );
     `,
-		roles: `
+    roles: `
       CREATE TABLE roles (
         id SERIAL PRIMARY KEY,
         name VARCHAR(100) NOT NULL UNIQUE,
@@ -107,7 +106,7 @@ export class DbInitService implements OnModuleInit {
         ('basic',   'subscription', 'Free tier with limited items'),
         ('premium', 'subscription', 'Unlimited items and files');
     `,
-		user_roles: `
+    user_roles: `
       CREATE TABLE user_roles (
         user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
         role_id INT NOT NULL REFERENCES roles(id) ON DELETE CASCADE,
@@ -117,7 +116,7 @@ export class DbInitService implements OnModuleInit {
       CREATE INDEX idx_user_roles_user ON user_roles(user_id);
       CREATE INDEX idx_user_roles_role ON user_roles(role_id);
     `,
-		exercise_categories: `
+    exercise_categories: `
       CREATE TABLE exercise_categories (
         id SERIAL PRIMARY KEY,
         wger_id INTEGER UNIQUE NOT NULL,
@@ -126,7 +125,7 @@ export class DbInitService implements OnModuleInit {
         updated_at TIMESTAMP DEFAULT now()
       );
     `,
-		muscles: `
+    muscles: `
       CREATE TABLE muscles (
         id SERIAL PRIMARY KEY,
         wger_id INTEGER UNIQUE NOT NULL,
@@ -136,7 +135,7 @@ export class DbInitService implements OnModuleInit {
         updated_at TIMESTAMP DEFAULT now()
       );
     `,
-		equipment: `
+    equipment: `
       CREATE TABLE equipment (
         id SERIAL PRIMARY KEY,
         wger_id INTEGER UNIQUE NOT NULL,
@@ -145,7 +144,7 @@ export class DbInitService implements OnModuleInit {
         updated_at TIMESTAMP DEFAULT now()
       );
     `,
-		exercises: `
+    exercises: `
       CREATE TABLE exercises (
         id SERIAL PRIMARY KEY,
         wger_id INTEGER UNIQUE NOT NULL,
@@ -156,7 +155,7 @@ export class DbInitService implements OnModuleInit {
         updated_at TIMESTAMP DEFAULT now()
       );
     `,
-                exercise_translations: `
+    exercise_translations: `
       CREATE TABLE exercise_translations (
         id SERIAL PRIMARY KEY,
         exercise_id INTEGER REFERENCES exercises(id) ON DELETE CASCADE,
@@ -166,14 +165,14 @@ export class DbInitService implements OnModuleInit {
       );
       CREATE INDEX idx_exercise_translations_ex ON exercise_translations(exercise_id);
     `,
-                exercise_info: `
+    exercise_info: `
       CREATE TABLE exercise_info (
         id SERIAL PRIMARY KEY,
         wger_id INTEGER UNIQUE NOT NULL,
         info JSONB
       );
     `,
-                exercise_videos: `
+    exercise_videos: `
       CREATE TABLE exercise_videos (
         id SERIAL PRIMARY KEY,
         wger_id INTEGER UNIQUE NOT NULL,
@@ -183,21 +182,21 @@ export class DbInitService implements OnModuleInit {
         updated_at TIMESTAMP DEFAULT now()
       );
     `,
-		exercise_muscles: `
+    exercise_muscles: `
       CREATE TABLE exercise_muscles (
         exercise_id INTEGER REFERENCES exercises(id) ON DELETE CASCADE,
         muscle_id INTEGER REFERENCES muscles(id) ON DELETE CASCADE,
         PRIMARY KEY (exercise_id, muscle_id)
       );
     `,
-		exercise_equipment: `
+    exercise_equipment: `
       CREATE TABLE exercise_equipment (
         exercise_id INTEGER REFERENCES exercises(id) ON DELETE CASCADE,
         equipment_id INTEGER REFERENCES equipment(id) ON DELETE CASCADE,
         PRIMARY KEY (exercise_id, equipment_id)
       );
     `,
-		workout_types: `
+    workout_types: `
       CREATE TABLE workout_types (
         id SERIAL PRIMARY KEY,
         name VARCHAR(100) NOT NULL UNIQUE,
@@ -206,7 +205,7 @@ export class DbInitService implements OnModuleInit {
         updated_at TIMESTAMP DEFAULT now()
       );
     `,
-		training_programs: `
+    training_programs: `
       CREATE TABLE training_programs (
         id SERIAL PRIMARY KEY,
         name VARCHAR(200) NOT NULL,
@@ -220,95 +219,95 @@ export class DbInitService implements OnModuleInit {
         updated_at TIMESTAMP DEFAULT now()
       );
     `,
-	};
+  };
 
-	private readonly tables: { tbl_name: string; dependencies: string[] }[] = [
-		{ tbl_name: 'users', dependencies: [] },
-		{ tbl_name: 'tags', dependencies: [] },
-		{ tbl_name: 'notifications', dependencies: ['users', 'items'] },
-		{ tbl_name: 'otp_codes', dependencies: [] },
-		{ tbl_name: 'rate_limit_logs', dependencies: [] },
-		{ tbl_name: 'jwt_blacklist', dependencies: [] },
-		{ tbl_name: 'roles', dependencies: [] },
-		{ tbl_name: 'user_roles', dependencies: ['users', 'roles'] },
-		{ tbl_name: 'exercise_categories', dependencies: [] },
-		{ tbl_name: 'muscles', dependencies: [] },
-		{ tbl_name: 'equipment', dependencies: [] },
-                { tbl_name: 'exercises', dependencies: ['exercise_categories'] },
-                { tbl_name: 'exercise_translations', dependencies: ['exercises'] },
-                { tbl_name: 'exercise_info', dependencies: [] },
-                { tbl_name: 'exercise_videos', dependencies: ['exercises'] },
-                { tbl_name: 'exercise_muscles', dependencies: ['exercises', 'muscles'] },
-                { tbl_name: 'exercise_equipment', dependencies: ['exercises', 'equipment'] },
-                { tbl_name: 'workout_types', dependencies: [] },
-                { tbl_name: 'training_programs', dependencies: [] },
-        ];
+  private readonly tables: { tbl_name: string; dependencies: string[] }[] = [
+    { tbl_name: 'users', dependencies: [] },
+    { tbl_name: 'tags', dependencies: [] },
+    { tbl_name: 'notifications', dependencies: ['users'] },
+    { tbl_name: 'otp_codes', dependencies: [] },
+    { tbl_name: 'rate_limit_logs', dependencies: [] },
+    { tbl_name: 'jwt_blacklist', dependencies: [] },
+    { tbl_name: 'roles', dependencies: [] },
+    { tbl_name: 'user_roles', dependencies: ['users', 'roles'] },
+    { tbl_name: 'exercise_categories', dependencies: [] },
+    { tbl_name: 'muscles', dependencies: [] },
+    { tbl_name: 'equipment', dependencies: [] },
+    { tbl_name: 'exercises', dependencies: ['exercise_categories'] },
+    { tbl_name: 'exercise_translations', dependencies: ['exercises'] },
+    { tbl_name: 'exercise_info', dependencies: [] },
+    { tbl_name: 'exercise_videos', dependencies: ['exercises'] },
+    { tbl_name: 'exercise_muscles', dependencies: ['exercises', 'muscles'] },
+    { tbl_name: 'exercise_equipment', dependencies: ['exercises', 'equipment'] },
+    { tbl_name: 'workout_types', dependencies: [] },
+    { tbl_name: 'training_programs', dependencies: [] },
+  ];
 
-	constructor(private dataSource: DataSource) { }
+  constructor(private dataSource: DataSource) { }
 
-	private resolveCreationOrder(): string[] {
-		const adj = new Map<string, string[]>();
-		const indegree = new Map<string, number>();
+  private resolveCreationOrder(): string[] {
+    const adj = new Map<string, string[]>();
+    const indegree = new Map<string, number>();
 
-		for (const { tbl_name } of this.tables) {
-			indegree.set(tbl_name, 0);
-			adj.set(tbl_name, []);
-		}
+    for (const { tbl_name } of this.tables) {
+      indegree.set(tbl_name, 0);
+      adj.set(tbl_name, []);
+    }
 
-		for (const { tbl_name, dependencies } of this.tables) {
-			for (const dep of dependencies) {
-				adj.get(dep)!.push(tbl_name);
-				indegree.set(tbl_name, (indegree.get(tbl_name) || 0) + 1);
-			}
-		}
+    for (const { tbl_name, dependencies } of this.tables) {
+      for (const dep of dependencies) {
+        adj.get(dep)!.push(tbl_name);
+        indegree.set(tbl_name, (indegree.get(tbl_name) || 0) + 1);
+      }
+    }
 
-		const queue = [...indegree.entries()]
-			.filter(([, v]) => v === 0)
-			.map(([k]) => k);
-		const order: string[] = [];
+    const queue = [...indegree.entries()]
+      .filter(([, v]) => v === 0)
+      .map(([k]) => k);
+    const order: string[] = [];
 
-		while (queue.length) {
-			const current = queue.shift()!;
-			order.push(current);
-			for (const neighbor of adj.get(current)!) {
-				indegree.set(neighbor, indegree.get(neighbor)! - 1);
-				if (indegree.get(neighbor) === 0) {
-					queue.push(neighbor);
-				}
-			}
-		}
+    while (queue.length) {
+      const current = queue.shift()!;
+      order.push(current);
+      for (const neighbor of adj.get(current)!) {
+        indegree.set(neighbor, indegree.get(neighbor)! - 1);
+        if (indegree.get(neighbor) === 0) {
+          queue.push(neighbor);
+        }
+      }
+    }
 
-		return order;
-	}
+    return order;
+  }
 
-	async onModuleInit() {
-		const runner = this.dataSource.createQueryRunner();
-		await runner.connect();
+  async onModuleInit() {
+    const runner = this.dataSource.createQueryRunner();
+    await runner.connect();
 
-		const orderedTables = this.resolveCreationOrder();
+    const orderedTables = this.resolveCreationOrder();
 
-		for (const tableName of orderedTables) {
-			const exists = await runner.hasTable(tableName);
-			if (exists) {
-				this.logger.log(`✅ Table "${tableName}" already exists`);
-				continue;
-			}
+    for (const tableName of orderedTables) {
+      const exists = await runner.hasTable(tableName);
+      if (exists) {
+        this.logger.log(`✅ Table "${tableName}" already exists`);
+        continue;
+      }
 
-			const createSql = this.tableDefinitions[tableName];
-			if (!createSql) {
-				this.logger.warn(`❌ No SQL found for table "${tableName}"`);
-				continue;
-			}
+      const createSql = this.tableDefinitions[tableName];
+      if (!createSql) {
+        this.logger.warn(`❌ No SQL found for table "${tableName}"`);
+        continue;
+      }
 
-			this.logger.warn(`⚠️ Table "${tableName}" is missing—creating now`);
-			try {
-				await runner.query(createSql);
-				this.logger.log(`🎉 Table "${tableName}" created`);
-			} catch (err: any) {
-				this.logger.error(`❌ Failed to create table "${tableName}": ${err.message}`);
-			}
-		}
+      this.logger.warn(`⚠️ Table "${tableName}" is missing—creating now`);
+      try {
+        await runner.query(createSql);
+        this.logger.log(`🎉 Table "${tableName}" created`);
+      } catch (err: any) {
+        this.logger.error(`❌ Failed to create table "${tableName}": ${err.message}`);
+      }
+    }
 
-		await runner.release();
-	}
+    await runner.release();
+  }
 }
