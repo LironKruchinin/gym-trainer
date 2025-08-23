@@ -88,12 +88,12 @@ export class ExercisesService implements OnModuleInit {
       if (!exercise) {
         exercise = this.exerciseRepo.create({
           wgerId: item.id,
-          name: item.name,
+          name,
           category: 'accessory',
           description: item.description,
         });
       } else {
-        exercise.name = item.name;
+        exercise.name = name;
         exercise.description = item.description;
       }
       await this.exerciseRepo.save(exercise);
