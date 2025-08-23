@@ -14,7 +14,8 @@ export default function ExerciseSelector({ value, onChange }: Props) {
     useEffect(() => {
         const fetchExercises = async () => {
             try {
-                const res = await fetch('/api/exercises');
+                const apiUrl = import.meta.env.VITE_API_URL;
+                const res = await fetch(`${apiUrl}/exercises`);
                 if (!res.ok) {
                     throw new Error(`unexpected status ${res.status}`);
                 }
