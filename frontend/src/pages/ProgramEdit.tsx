@@ -33,7 +33,12 @@ export default function ProgramEdit() {
                 const programs: Program[] = JSON.parse(stored);
                 const existing = programs.find((p) => p.id === Number(id));
                 if (existing) {
-                    setProgram(existing);
+                    setProgram({
+                        ...existing,
+                        exercises: existing.exercises ?? [
+                            { name: '', sets: '', weight: '', rest: '' },
+                        ],
+                    });
                 }
             }
         }
@@ -86,7 +91,7 @@ export default function ProgramEdit() {
                     />
                 </label>
 
-                {program.exercises.map((exercise, idx) => (
+                {(program.exercises || []).map((exercise, idx) => (
                     <div key={idx} className="program-edit__exercise">
                         <label className="program-edit__field">
                             <span className="program-edit__label">שם התרגיל</span>
