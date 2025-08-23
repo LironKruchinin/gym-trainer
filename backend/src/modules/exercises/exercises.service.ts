@@ -75,6 +75,15 @@ export class ExercisesService implements OnModuleInit {
     ]);
 
     for (const item of exData.results ?? []) {
+      let name = item.name as string | undefined;
+      if (!name) {
+        const fallback = trData.results?.find((t) => t.exercise === item.id);
+        name = fallback?.name;
+        if (!name) {
+          continue; // skip exercises without any name
+        }
+        item.description = item.description ?? fallback.description;
+      }
       let exercise = await this.exerciseRepo.findOne({ where: { wgerId: item.id } });
       if (!exercise) {
         exercise = this.exerciseRepo.create({
