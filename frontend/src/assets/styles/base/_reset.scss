@@ -1,0 +1,52 @@
+@use "../abstracts" as *;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: strip-unit($base-font) * 1px;
+    height: 100%;
+    direction: rtl;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    background: $color-bg;
+    color: $color-text;
+    font-family: system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    line-height: $base-line;
+}
+
+img,
+video {
+    max-width: 100%;
+    height: auto;
+}
+
+
+ul,
+li {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+p {
+    margin: 0;
+}

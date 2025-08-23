@@ -1,0 +1,44 @@
+@use "../abstracts" as *;
+
+.grid {
+    display: grid;
+    gap: fluid(12px, 24px);
+}
+
+.grid--page {
+    grid-template-columns: 1fr;
+
+    @include respond(tablet) {
+        grid-template-columns: repeat(8, 1fr);
+    }
+
+    @include respond(desktop) {
+        grid-template-columns: repeat(12, 1fr);
+    }
+
+    @include respond(tv) {
+        grid-template-columns: repeat(12, 1fr);
+    }
+}
+
+.grid__span {
+    grid-column: 1 / -1;
+}
+
+@include respond(tablet) {
+    .grid__span--4\@tablet {
+        grid-column: span 4;
+    }
+}
+
+@include respond(desktop) {
+    .grid__span--6\@desktop {
+        grid-column: span 6;
+    }
+}
+
+@include respond(tv) {
+    .grid__span--8\@tv {
+        grid-column: span 8;
+    }
+}

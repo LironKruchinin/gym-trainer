@@ -1,0 +1,38 @@
+// Breakpoints (mobile-first)
+$breakpoints: (
+    mobile: 0,
+    // default
+    tablet: 768px,
+    desktop: 1200px,
+    tv: 1600px // large desktop / TV
+);
+
+// Container max-widths per bp
+$container-max: (
+    mobile: 100%,
+    // full width
+    tablet: 720px,
+    desktop: 1080px,
+    tv: 1440px
+);
+
+// Fluid scale bounds (used by clamp())
+$fluid-min-vw: 360px; // smallest viewport you target
+$fluid-max-vw: 1600px; // largest viewport you target
+
+// Base sizes (can tweak per project)
+$font-stack: 'Segoe UI', sans-serif;
+$base-font: 16px;
+$base-line: 1.5;
+$space-unit: 8px; // spacing seed (8pt grid)
+$radius: 12px;
+
+// Color examples
+$color-bg: #0e0f13;
+$color-card: #1b1e25;
+$color-text: #e9eef3;
+$color-accent: #7c5cff;
+
+$primary-color: #4f46e5;
+$background-color: #f9f9fa;
+$text-color: #333;

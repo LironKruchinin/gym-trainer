@@ -1,0 +1,109 @@
+.trainee-attendance {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 1rem;
+    padding: 1.25rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    justify-content: space-between;
+
+    &__details {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+
+        &:not(:first-child) {
+            flex: 1;
+            justify-content: space-between;
+        }
+    }
+
+    &__status {
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: #fff;
+        padding: 0.25rem 0.75rem;
+        border-radius: 50px;
+        white-space: nowrap;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+
+        &--waiting {
+            background-color: #2196f3; // blue
+        }
+
+        &--active {
+            background-color: #4caf50; // green
+        }
+
+        &--canceled {
+            background-color: #f44336; // red
+        }
+
+        &--finished {
+            background-color: #9c27b0; // purple
+        }
+    }
+
+    &__name {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #333;
+    }
+
+    &__time {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.95rem;
+        color: #555;
+
+        .icon {
+            font-size: 1rem;
+            color: #666;
+        }
+    }
+
+    &__time-value {
+        font-weight: 600;
+        color: #222;
+        display: flex;
+        gap: 0.25rem;
+    }
+
+    &__time-duration {
+        margin-left: 0.25rem;
+        font-size: 0.8rem;
+        font-weight: 400;
+        color: #888;
+    }
+
+    &__action {
+        align-self: stretch;
+        display: flex;
+        justify-content: center;
+        padding: 0.75rem 1rem;
+        background-color: #1976d2;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+            background-color: #1565c0;
+        }
+
+        &-text {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+        }
+    }
+
+    .icon {
+        font-size: 1.2rem;
+        color: #444;
+    }
+}

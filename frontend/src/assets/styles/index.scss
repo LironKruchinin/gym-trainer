@@ -1,0 +1,14 @@
+/* 1) abstracts: expose globally in this file (for any code written here) */
+@use "./abstracts" as *;
+
+/* 2) feature groups via barrels */
+@use "./base";
+@use "./layout";
+@use "./components";
+@use "./pages";
+
+#root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}

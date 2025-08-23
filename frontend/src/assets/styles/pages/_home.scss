@@ -1,0 +1,99 @@
+@use "../abstracts/functions" as fn; // only the functions
+
+
+.home {
+    &__header {
+        margin-bottom: 1.5rem;
+        text-align: center;
+        background-color: #eef5ff;
+        padding: 25px 20px 15px;
+    }
+
+    &__title {
+        font-size: fn.fluid(28px, 72px, 320px, 3840px);
+        line-height: 1.2;
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+    }
+
+    &__subtitle {
+        font-size: fn.fluid(16px, 28px);
+        line-height: 1.35;
+        color: #666;
+    }
+
+    &__clock {
+        font-weight: bold;
+        font-size: fn.fluid(20px, 30px);
+        margin-bottom: 30px;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    &__cubes {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+
+    &__action_cubes {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+
+        .home__action_cube {
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+
+            .icon {
+                font-size: fn.fluid(28px, 35px);
+            }
+
+            h3 {
+                font-size: fn.fluid(18px, 24px);
+                margin-top: 10px;
+                font-weight: 600;
+            }
+
+            p {
+                font-size: fn.fluid(14px, 18px);
+                color: #666;
+                margin-top: 5px;
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    &__trainee_schedual {
+        margin-top: 2rem;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+
+        &-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: fn.fluid(20px, 24px);
+            font-weight: bold;
+            color: #222;
+            margin-bottom: 1rem;
+
+            .icon {
+                font-size: fn.fluid(24px, 28px);
+                color: #2c3e50;
+            }
+        }
+    }
+}

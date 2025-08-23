@@ -1,0 +1,110 @@
+/* Minimal variables; swap to your abstracts if you want */
+$radius: 999px;
+
+.progress {
+    --progress-value: 0%;
+    --bg: #e8e7eb;
+    /* track background */
+    --fg: #7c5cff;
+    /* bar color (primary) */
+    --height: 10px;
+    --label-color: #fff;
+
+    position: relative;
+    width: 100%;
+    background: var(--bg);
+    border-radius: $radius;
+    overflow: hidden;
+    height: var(--height);
+
+    /* Sizes */
+    &--sm {
+        --height: 8px;
+    }
+
+    &--md {
+        --height: 12px;
+    }
+
+    &--lg {
+        --height: 16px;
+    }
+
+    /* Tones */
+    &--neutral {
+        --fg: #9aa4b2;
+    }
+
+    &--primary {
+        --fg: #7c5cff;
+    }
+
+    &--success {
+        --fg: #2fbf71;
+    }
+
+    &--warning {
+        --fg: #f5a524;
+    }
+
+    &--danger {
+        --fg: #f0435c;
+    }
+
+    /* Bar */
+    &__bar {
+        height: 100%;
+        width: var(--progress-value);
+        background: var(--fg);
+        border-radius: inherit;
+        position: relative;
+        transition: width 200ms ease;
+    }
+
+    /* Label inside the bar */
+    &__label {
+        position: absolute;
+        inset-inline-end: 8px;
+        /* RTL/LTR friendly */
+        inset-block-start: 50%;
+        transform: translateY(-50%);
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--label-color);
+        mix-blend-mode: luminosity;
+        /* keeps label visible on bright colors */
+        pointer-events: none;
+    }
+
+    /* Stripes */
+    &--striped .progress__bar {
+        background-image:
+            linear-gradient(45deg,
+                rgba(255, 255, 255, 0.22) 25%,
+                transparent 25%,
+                transparent 50%,
+                rgba(255, 255, 255, 0.22) 50%,
+                rgba(255, 255, 255, 0.22) 75%,
+                transparent 75%,
+                transparent);
+        background-size: 1.25rem 1.25rem;
+    }
+
+    /* Animated stripes */
+    @media (prefers-reduced-motion: no-preference) {
+        &--animated.progress--striped .progress__bar {
+            animation: progress-stripes 1s linear infinite;
+        }
+    }
+}
+
+/* Keyframes */
+@keyframes progress-stripes {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 1.25rem 0;
+    }
+}

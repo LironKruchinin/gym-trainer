@@ -1,0 +1,27 @@
+# 1️⃣ Build stage
+FROM node:20-alpine AS builder
+WORKDIR /usr/src/app
+
+# install deps
+COPY package*.json ./
+RUN npm ci
+
+# copy & compile
+COPY tsconfig*.json ./
+COPY src ./src
+RUN npm run build             # outputs to dist/
+
+# 2️⃣ Run stage
+FROM node:20-alpine
+WORKDIR /usr/src/app
+
+# copy compiled output + prod deps
+COPY --from=builder /usr/src/app/dist ./dist
+COPY --from=builder /usr/src/app/node_modules ./node_modules
+COPY package*.json ./
+
+# copy your .env or rely on Compose env injection
+ENV NODE_ENV=production
+EXPOSE 3000
+
+CMD ["node", "dist/main.js"]

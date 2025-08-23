@@ -1,0 +1,71 @@
+.exercise {
+    background: #f9fafc;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+    }
+
+    &__title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #222;
+    }
+
+    /* small status dot + state modifiers */
+    &__status {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #ccc;
+
+        &--done {
+            background: #2fbf71;
+        }
+
+        /* green */
+        &--inprogress {
+            background: #f5a524;
+        }
+
+        /* amber */
+        &--idle {
+            background: #9aa4b2;
+        }
+
+        /* gray */
+    }
+
+    &__details {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px 16px;
+    }
+
+    &__item {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.875rem;
+    }
+
+    &__label {
+        font-weight: 500;
+        color: #555;
+    }
+
+    &__value {
+        font-weight: 600;
+        color: #222;
+    }
+}

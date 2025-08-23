@@ -1,0 +1,68 @@
+{
+	"name": "template_react_ts_postgress_redux_docker",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc -b && vite build",
+		"lint": "eslint .",
+		"preview": "vite preview",
+		"prepare": "husky install"
+	},
+	"lint-staged": {
+		"*.{ts,tsx,js,jsx}": [
+			"eslint --fix",
+			"prettier --write"
+		],
+		"*.{css,scss}": [
+			"prettier --write"
+		]
+	},
+	"dependencies": {
+		"@fortawesome/fontawesome-svg-core": "^7.0.0",
+		"@fortawesome/free-solid-svg-icons": "^7.0.0",
+		"@fortawesome/react-fontawesome": "^0.2.3",
+		"@reduxjs/toolkit": "^2.8.2",
+		"axios": "^1.9.0",
+		"i18next": "^25.2.1",
+		"react": "^19.1.0",
+		"react-dom": "^19.1.0",
+		"react-i18next": "^15.5.2",
+		"react-redux": "^9.2.0",
+		"react-router-dom": "^7.6.2"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.25.0",
+		"@testing-library/jest-dom": "^6.6.3",
+		"@testing-library/react": "^16.3.0",
+		"@testing-library/user-event": "^14.6.1",
+		"@types/axios": "^0.9.36",
+		"@types/jest": "^29.5.14",
+		"@types/react": "^19.1.2",
+		"@types/react-dom": "^19.1.2",
+		"@types/react-redux": "^7.1.34",
+		"@types/react-router-dom": "^5.3.3",
+		"@typescript-eslint/eslint-plugin": "^8.33.1",
+		"@typescript-eslint/parser": "^8.33.1",
+		"@vitejs/plugin-react": "^4.4.1",
+		"cypress": "^14.4.1",
+		"eslint": "^9.28.0",
+		"eslint-config-prettier": "^10.1.5",
+		"eslint-plugin-prettier": "^5.4.1",
+		"eslint-plugin-react": "^7.37.5",
+		"eslint-plugin-react-hooks": "^5.2.0",
+		"eslint-plugin-react-refresh": "^0.4.19",
+		"globals": "^16.0.0",
+		"husky": "^8.0.0",
+		"jest": "^29.7.0",
+		"lint-staged": "^16.1.0",
+		"prettier": "^3.5.3",
+		"sass": "^1.89.2",
+		"ts-jest": "^29.3.4",
+		"typescript": "~5.8.3",
+		"typescript-eslint": "^8.30.1",
+		"vite": "^6.3.5",
+		"vite-tsconfig-paths": "^5.1.4"
+	}
+}

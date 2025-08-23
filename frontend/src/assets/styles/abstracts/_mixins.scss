@@ -1,0 +1,63 @@
+/* --- ALL @use FIRST --- */
+@use "sass:map";
+@use "sass:math";
+@use "variables" as *; // your project vars (breakpoints, container sizes, etc.)
+@use "functions" as fn; // your fluid(), strip-unit(), etc.
+
+/* --- THEN your mixins --- */
+
+/* Media query helper */
+@mixin respond($bp) {
+    $value: map.get($breakpoints, $bp);
+
+    @if $value ==null {
+        @error "Breakpoint `#{$bp}` not found in $breakpoints.";
+    }
+
+    @media (min-width: $value) {
+        @content;
+    }
+}
+
+/* Container helper (optional) */
+@mixin container {
+    width: min(100% - 2rem, map.get($container-max, mobile));
+    margin-inline: auto;
+
+    @include respond(tablet) {
+        width: min(100% - 3rem, map.get($container-max, tablet));
+    }
+
+    @include respond(desktop) {
+        width: min(100% - 4rem, map.get($container-max, desktop));
+    }
+
+    @include respond(tv) {
+        width: min(100% - 6rem, map.get($container-max, tv));
+    }
+}
+
+/* Fluid typography */
+@mixin type($min, $max, $weight: 400, $lh: $base-line) {
+    font-size: fn.fluid($min, $max);
+    line-height: $lh;
+    font-weight: $weight;
+}
+
+/* Fluid spacing */
+@mixin space($prop, $min, $max) {
+    #{$prop}: fn.fluid($min, $max);
+}
+
+/* Screen-reader only */
+@mixin sr-only {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}

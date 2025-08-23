@@ -1,0 +1,22 @@
+@use "sass:math";
+@use "sass:meta";
+@use "variables" as *;
+
+@function strip-unit($value) {
+    @if meta.type-of($value)=='number' and not math.is-unitless($value) {
+        @return math.div($value, $value * 0 + 1);
+    }
+
+    @return $value;
+}
+
+@function rem($px, $root: $base-font) {
+    @return math.div(strip-unit($px), strip-unit($root)) * 1rem;
+}
+
+@function fluid($min, $max, $minVW: $fluid-min-vw, $maxVW: $fluid-max-vw) {
+    $m: math.div((strip-unit($max) - strip-unit($min)),
+            (strip-unit($maxVW) - strip-unit($minVW))) * 100;
+    $b: strip-unit($min) - (math.div(strip-unit($minVW), 100) * $m);
+    @return clamp(#{$min}, #{$b}px + #{$m}vw, #{$max});
+}

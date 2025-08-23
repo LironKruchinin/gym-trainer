@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile     # or Dockerfile.frontend
+    ports:
+      - '8080:80'
+    restart: unless-stopped

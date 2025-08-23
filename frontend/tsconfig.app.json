@@ -1,0 +1,58 @@
+// tsconfig.app.json
+{
+	"compilerOptions": {
+		"types": ["vite/client"],
+		"allowImportingTsExtensions": true,
+		/* Path aliases for @store, @components, etc */
+		"baseUrl": "./src",
+		"erasableSyntaxOnly": true,
+		"jsx": "react-jsx",
+		"lib": [
+			"ES2020",
+			"DOM",
+			"DOM.Iterable"
+		],
+		"module": "ESNext",
+		"moduleDetection": "force",
+		"moduleResolution": "bundler",
+		"noEmit": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedSideEffectImports": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"paths": {
+			"@components/*": [
+				"components/*"
+			],
+			"@pages/*": [
+				"pages/*"
+			],
+			"@routes/*": [
+				"routes/*"
+			],
+			"@store/*": [
+				"store/*"
+			],
+			"@styles/*": [
+				"assets/styles/*"
+			]
+		},
+		"skipLibCheck": true,
+		/* Strictness & linting */
+		"strict": true,
+		"target": "ES2020",
+		"tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+		"useDefineForClassFields": true,
+		"verbatimModuleSyntax": true
+	},
+	"include": [
+		"src/vite-env.d.ts",
+		"src/components/**/*",
+		"src/pages/**/*",
+		"src/store/**/*",
+		"src/routes/**/*",
+		"src/assets/styles/**/*",
+		"src/main.tsx",
+		"src/App.tsx"
+	]
+}
