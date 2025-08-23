@@ -1,4 +1,8 @@
-import { useGetTraineesQuery, useLogTrainingMutation } from '@store/slices/api/apiSlice';
+import {
+    useGetTraineesQuery,
+    useLogTrainingMutation,
+    useSyncTraineesMutation,
+} from '@store/slices/api/apiSlice';
 import { useAppDispatch, addLog, setTrainees } from '@store';
 import type { Trainee } from '@store/slices/api/Trainee';
 import TrainingMonitorCube from '@components/layout/TrainingMonitorCube';
@@ -41,11 +45,13 @@ const localPrograms: LocalProgram[] = [
 export default function TraineeScreens() {
     const { data: trainees = [] } = useGetTraineesQuery();
     const [logTraining] = useLogTrainingMutation();
+    const [syncTrainees] = useSyncTraineesMutation();
     const dispatch = useAppDispatch();
 
     useEffect(() => {
         localStorage.setItem('programs', JSON.stringify(localPrograms));
-    }, []);
+        syncTrainees();
+    }, [syncTrainees]);
 
     useEffect(() => {
         dispatch(setTrainees(trainees));
