@@ -7,7 +7,7 @@ export class ExerciseTranslation {
     id: number;
 
     @Index('idx_translation_wger_id')
-    @Column({ unique: true })
+    @Column({ unique: true, nullable: true })
     wgerId: number;
 
     @ManyToOne(() => Exercise, (e) => e.translations, { onDelete: 'CASCADE' })
