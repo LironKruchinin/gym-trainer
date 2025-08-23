@@ -15,9 +15,16 @@ export default function ExerciseSelector({ value, onChange }: Props) {
         const fetchExercises = async () => {
             try {
                 const res = await fetch('/api/exercises');
-                const data = await res.json();
+                if (!res.ok) {
+                    throw new Error(`unexpected status ${res.status}`);
+                }
+                const contentType = res.headers.get('content-type') ?? '';
+                if (!contentType.includes('application/json')) {
+                    throw new Error(`expected JSON, got ${contentType}`);
+                }
+                const data: Array<{ name?: string }> = await res.json();
                 const names = (data || [])
-                    .map((e: any) => sanitize(e.name))
+                    .map((e) => sanitize(e.name))
                     .filter(Boolean);
                 setOptions(names);
             } catch (err) {
