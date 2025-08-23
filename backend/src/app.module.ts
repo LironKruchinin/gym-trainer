@@ -8,6 +8,7 @@ import { SessionsModule } from './modules/sessions/sessions.module';
 import { TrainingProgramsModule } from './modules/training-programs/training-programs.module';
 import { TraineesModule } from './modules/trainees/trainees.module';
 import { TrainingLogsModule } from './modules/training-logs/training-logs.module';
+import { ExercisesModule } from './modules/exercises/exercises.module';
 
 @Module({
 	imports: [
@@ -20,6 +21,7 @@ import { TrainingLogsModule } from './modules/training-logs/training-logs.module
                 TrainingProgramsModule,
                 TraineesModule,
                 TrainingLogsModule,
+                ExercisesModule,
         ],
 	controllers: [],
 	providers: [],
