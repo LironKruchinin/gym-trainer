@@ -23,8 +23,10 @@ export async function createProgram(program: Program) {
             rest: sanitize(e.rest),
         })),
     };
-    const apiUrl = import.meta.env.VITE_API_URL;
-    const res = await fetch(`${apiUrl}/training-programs`, {
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+    // build URL correctly whether apiUrl has a trailing slash or not
+    const url = new URL('training-programs', apiUrl.endsWith('/') ? apiUrl : apiUrl + '/').toString();
+    const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(sanitized),

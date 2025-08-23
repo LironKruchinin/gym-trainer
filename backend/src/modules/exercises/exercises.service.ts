@@ -39,7 +39,9 @@ export class ExercisesService implements OnModuleInit {
   async findAll() {
     const exercises = await this.exerciseRepo
       .createQueryBuilder('e')
-      .leftJoinAndSelect('e.translations', 't', 't.language IN (:...langs)', { langs: [21, 2] })
+      .innerJoinAndSelect('e.translations', 't', 't.language IN (:...langs)', {
+        langs: [21, 2],
+      })
       .leftJoinAndSelect('e.videos', 'v')
       .getMany();
     if (exercises.length === 0) {
@@ -51,7 +53,9 @@ export class ExercisesService implements OnModuleInit {
   findOne(id: number) {
     return this.exerciseRepo
       .createQueryBuilder('e')
-      .leftJoinAndSelect('e.translations', 't', 't.language IN (:...langs)', { langs: [21, 2] })
+      .innerJoinAndSelect('e.translations', 't', 't.language IN (:...langs)', {
+        langs: [21, 2],
+      })
       .leftJoinAndSelect('e.videos', 'v')
       .where('e.id = :id', { id })
       .getOneOrFail();
@@ -86,10 +90,12 @@ export class ExercisesService implements OnModuleInit {
     for (const item of exData.results ?? []) {
       let name = item.name as string | undefined;
       if (!name) {
-        const fallback = trData.results?.find((t) => t.exercise === item.id);
+        const fallback = trData.results?.find(
+          (t) => t.exercise === item.id && [21, 2].includes(t.language),
+        );
         name = fallback?.name;
         if (!name) {
-          continue; // skip exercises without any name
+          continue; // skip exercises without English or Hebrew name
         }
         item.description = item.description ?? fallback.description;
       }
