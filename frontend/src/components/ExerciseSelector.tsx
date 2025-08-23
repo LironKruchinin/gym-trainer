@@ -6,7 +6,7 @@ interface Props {
     onChange: (val: string) => void;
 }
 
-const sanitize = (v?: string | null) => (v ?? '').replace(/<[^>]*>?/gm, '').trim();
+const sanitize = (v?: string | null) => (v ?? '').replace(/<[^>]*>?/gm, '');
 
 export default function ExerciseSelector({ value, onChange }: Props) {
     const [options, setOptions] = useState<string[]>([]);
