@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ExerciseSelector from '../components/ExerciseSelector';
+import { createProgram, Program } from '../services/trainingPrograms';
 
 interface Exercise {
     name: string;
@@ -11,41 +12,28 @@ interface Exercise {
     rest: string;
 }
 
-interface Program {
+interface LocalProgram extends Program {
     id?: number;
-    name: string;
-    exercises: Exercise[];
 }
+
+const sanitize = (v: string) => v.replace(/<[^>]*>?/gm, '').trim();
 
 export default function ProgramEdit() {
     const navigate = useNavigate();
-    const { id } = useParams();
-    const [program, setProgram] = useState<Program>({
+    const params = useParams();
+    const id = params.id ? Number(sanitize(params.id)) : undefined;
+    const [program, setProgram] = useState<LocalProgram>({
         name: '',
         exercises: [{ name: '', sets: '', weight: '', rest: '' }],
     });
 
     useEffect(() => {
-        if (id) {
-            const stored = localStorage.getItem('programs');
-            if (stored) {
-                const programs: Program[] = JSON.parse(stored);
-                const existing = programs.find((p) => p.id === Number(id));
-                if (existing) {
-                    setProgram({
-                        ...existing,
-                        exercises: existing.exercises ?? [
-                            { name: '', sets: '', weight: '', rest: '' },
-                        ],
-                    });
-                }
-            }
-        }
+        // placeholder for future loading of existing programs from the backend
     }, [id]);
 
     const updateExercise = (index: number, field: keyof Exercise, value: string) => {
         const updated = [...program.exercises];
-        updated[index] = { ...updated[index], [field]: value };
+        updated[index] = { ...updated[index], [field]: sanitize(value) };
         setProgram({ ...program, exercises: updated });
     };
 
@@ -61,19 +49,15 @@ export default function ProgramEdit() {
         setProgram({ ...program, exercises: updated });
     };
 
-    const saveProgram = (e: React.FormEvent) => {
+    const saveProgram = async (e: React.FormEvent) => {
         e.preventDefault();
-        const stored = localStorage.getItem('programs');
-        const programs: Program[] = stored ? JSON.parse(stored) : [];
-        let updated: Program[];
-        if (id) {
-            updated = programs.map((p) => (p.id === Number(id) ? { ...program, id: Number(id) } : p));
-        } else {
-            const newProgram = { ...program, id: Date.now() };
-            updated = [...programs, newProgram];
+        try {
+            await createProgram({ name: sanitize(program.name), exercises: program.exercises });
+            navigate('/programs');
+        } catch (err) {
+            console.error(err);
+            alert('שמירת התוכנית נכשלה');
         }
-        localStorage.setItem('programs', JSON.stringify(updated));
-        navigate('/programs');
     };
 
     return (
@@ -85,7 +69,7 @@ export default function ProgramEdit() {
                     <input
                         className="program-edit__input"
                         value={program.name}
-                        onChange={(e) => setProgram({ ...program, name: e.target.value })}
+                        onChange={(e) => setProgram({ ...program, name: sanitize(e.target.value) })}
                         required
                     />
                 </label>
