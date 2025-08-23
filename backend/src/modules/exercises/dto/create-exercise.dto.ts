@@ -1,4 +1,4 @@
-import { IsEnum, IsOptional, IsString, IsArray } from 'class-validator';
+import { IsEnum, IsOptional, IsString, IsArray, IsNumber } from 'class-validator';
 import { ExerciseCategory } from '../entities/exercise.entity';
 
 export class CreateExerciseDto {
@@ -7,6 +7,9 @@ export class CreateExerciseDto {
 
     @IsEnum(['cardio', 'strength', 'olympic', 'gymnastics', 'accessory'])
     category: ExerciseCategory;
+
+    @IsOptional() @IsNumber()
+    wgerId?: number;
 
     @IsOptional() @IsString()
     equipment?: string;

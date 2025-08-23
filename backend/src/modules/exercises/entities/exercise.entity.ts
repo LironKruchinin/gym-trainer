@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { ExerciseTranslation } from './exercise-translation.entity';
+import { ExerciseVideo } from './exercise-video.entity';
 
 export type ExerciseCategory =
     | 'cardio'
@@ -11,6 +13,9 @@ export type ExerciseCategory =
 export class Exercise {
     @PrimaryGeneratedColumn()
     id: number;
+
+    @Column({ unique: true, nullable: true })
+    wgerId?: number;
 
     @Column({ type: 'varchar', length: 200 })
     name: string;
@@ -27,4 +32,10 @@ export class Exercise {
     // stores as comma‑separated in a single text column
     @Column({ type: 'simple-array', nullable: true })
     scalingOptions?: string[];
+
+    @OneToMany(() => ExerciseTranslation, (t) => t.exercise)
+    translations?: ExerciseTranslation[];
+
+    @OneToMany(() => ExerciseVideo, (v) => v.exercise)
+    videos?: ExerciseVideo[];
 }

@@ -131,6 +131,7 @@ export class DbInitService implements OnModuleInit {
         id SERIAL PRIMARY KEY,
         wger_id INTEGER UNIQUE NOT NULL,
         name VARCHAR(100),
+        is_front BOOLEAN DEFAULT false,
         created_at TIMESTAMP DEFAULT now(),
         updated_at TIMESTAMP DEFAULT now()
       );
@@ -151,6 +152,33 @@ export class DbInitService implements OnModuleInit {
         name VARCHAR(200),
         description TEXT,
         category_id INTEGER REFERENCES exercise_categories(id),
+        created_at TIMESTAMP DEFAULT now(),
+        updated_at TIMESTAMP DEFAULT now()
+      );
+    `,
+                exercise_translations: `
+      CREATE TABLE exercise_translations (
+        id SERIAL PRIMARY KEY,
+        exercise_id INTEGER REFERENCES exercises(id) ON DELETE CASCADE,
+        language INTEGER NOT NULL,
+        name VARCHAR(200) NOT NULL,
+        description TEXT
+      );
+      CREATE INDEX idx_exercise_translations_ex ON exercise_translations(exercise_id);
+    `,
+                exercise_info: `
+      CREATE TABLE exercise_info (
+        id SERIAL PRIMARY KEY,
+        wger_id INTEGER UNIQUE NOT NULL,
+        info JSONB
+      );
+    `,
+                exercise_videos: `
+      CREATE TABLE exercise_videos (
+        id SERIAL PRIMARY KEY,
+        wger_id INTEGER UNIQUE NOT NULL,
+        exercise_id INTEGER REFERENCES exercises(id) ON DELETE CASCADE,
+        url TEXT NOT NULL,
         created_at TIMESTAMP DEFAULT now(),
         updated_at TIMESTAMP DEFAULT now()
       );
@@ -206,12 +234,15 @@ export class DbInitService implements OnModuleInit {
 		{ tbl_name: 'exercise_categories', dependencies: [] },
 		{ tbl_name: 'muscles', dependencies: [] },
 		{ tbl_name: 'equipment', dependencies: [] },
-		{ tbl_name: 'exercises', dependencies: ['exercise_categories'] },
-		{ tbl_name: 'exercise_muscles', dependencies: ['exercises', 'muscles'] },
-		{ tbl_name: 'exercise_equipment', dependencies: ['exercises', 'equipment'] },
-		{ tbl_name: 'workout_types', dependencies: [] },
-		{ tbl_name: 'training_programs', dependencies: [] },
-	];
+                { tbl_name: 'exercises', dependencies: ['exercise_categories'] },
+                { tbl_name: 'exercise_translations', dependencies: ['exercises'] },
+                { tbl_name: 'exercise_info', dependencies: [] },
+                { tbl_name: 'exercise_videos', dependencies: ['exercises'] },
+                { tbl_name: 'exercise_muscles', dependencies: ['exercises', 'muscles'] },
+                { tbl_name: 'exercise_equipment', dependencies: ['exercises', 'equipment'] },
+                { tbl_name: 'workout_types', dependencies: [] },
+                { tbl_name: 'training_programs', dependencies: [] },
+        ];
 
 	constructor(private dataSource: DataSource) { }
 
