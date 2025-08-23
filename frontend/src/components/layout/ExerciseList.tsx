@@ -6,7 +6,6 @@ interface Exercise {
     reps?: number | string;
     weight?: number | string;
     rest?: string;
-    notes?: string;
 }
 
 export default function ExerciseList({ exercises = [] }: { exercises: Exercise[] }) {

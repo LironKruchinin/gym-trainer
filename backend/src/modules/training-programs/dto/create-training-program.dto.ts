@@ -20,7 +20,7 @@ class ProgramExerciseDto {
     sets: number;
     @IsString() reps: string;
     @IsString() weight: string;
-    @IsOptional() @IsString() notes?: string;
+    @IsOptional() @IsString() rest?: string;
 }
 
 export class CreateTrainingProgramDto {

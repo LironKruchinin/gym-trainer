@@ -5,33 +5,33 @@ export interface ProgramExercise {
     sets: number;
     reps: string;
     weight: string;
-    notes?: string;
+    rest?: string;
 }
 
-@Entity()
+@Entity('training_programs')
 export class TrainingProgram {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ length: 200 })
+    @Column({ name: 'name', length: 200 })
     name: string;
 
-    @Column({ type: 'text', nullable: true })
+    @Column({ name: 'description', type: 'text', nullable: true })
     description?: string;
 
-    @Column({ type: 'varchar', length: 20 })
+    @Column({ name: 'difficulty_level', type: 'varchar', length: 20 })
     difficultyLevel: 'beginner' | 'intermediate' | 'advanced';
 
     // stored as JSONB
-    @Column({ type: 'jsonb', nullable: true })
+    @Column({ name: 'exercises', type: 'jsonb', nullable: true })
     exercises?: ProgramExercise[];
 
-    @Column({ length: 100 })
+    @Column({ name: 'workout_type', length: 100 })
     workoutType: string;
 
-    @Column({ length: 50, nullable: true })
+    @Column({ name: 'time_cap', length: 50, nullable: true })
     timeCap?: string;
 
-    @Column({ default: true })
+    @Column({ name: 'is_template', default: true })
     isTemplate: boolean;
 }

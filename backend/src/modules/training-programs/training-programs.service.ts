@@ -25,7 +25,7 @@ export class TrainingProgramsService {
         name: sanitizeInput(e.name),
         reps: sanitizeInput(e.reps),
         weight: sanitizeInput(e.weight),
-        notes: e.notes ? sanitizeInput(e.notes) : undefined,
+        rest: e.rest ? sanitizeInput(e.rest) : undefined,
       })),
     };
     const tp = this.repo.create(sanitized);
@@ -52,7 +52,7 @@ export class TrainingProgramsService {
         name: sanitizeInput(e.name),
         reps: sanitizeInput(e.reps),
         weight: sanitizeInput(e.weight),
-        notes: e.notes ? sanitizeInput(e.notes) : undefined,
+        rest: e.rest ? sanitizeInput(e.rest) : undefined,
       })),
     };
     await this.repo.update(id, sanitized);
