@@ -20,23 +20,26 @@
 		"noUncheckedSideEffectImports": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
-		"paths": {
-			"@components/*": [
-				"components/*"
-			],
-			"@pages/*": [
-				"pages/*"
-			],
-			"@routes/*": [
-				"routes/*"
-			],
-			"@store/*": [
-				"store/*"
-			],
-			"@styles/*": [
-				"assets/styles/*"
-			]
-		},
+                "paths": {
+                        "@components/*": [
+                                "components/*"
+                        ],
+                        "@pages/*": [
+                                "pages/*"
+                        ],
+                        "@routes/*": [
+                                "routes/*"
+                        ],
+                        "@store": [
+                                "store/index.ts"
+                        ],
+                        "@store/*": [
+                                "store/*"
+                        ],
+                        "@styles/*": [
+                                "assets/styles/*"
+                        ]
+                },
 		"skipLibCheck": true,
 		/* Strictness & linting */
 		"strict": true,

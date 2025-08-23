@@ -77,8 +77,8 @@ export default function ProgramManagement() {
             >
                 <FontAwesomeIcon icon={faPlus} />
                 <span>הוסף תוכנית אימון חדשה</span>
-
             </button>
         </div>
     );
 }
+
