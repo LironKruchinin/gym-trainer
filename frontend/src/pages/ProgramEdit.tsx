@@ -8,6 +8,7 @@ import { createProgram, type Program } from '../services/trainingPrograms';
 interface Exercise {
     name: string;
     sets: string;
+    reps: string;
     weight: string;
     rest: string;
 }
@@ -24,7 +25,7 @@ export default function ProgramEdit() {
     const id = params.id ? Number(sanitize(params.id)) : undefined;
     const [program, setProgram] = useState<LocalProgram>({
         name: '',
-        exercises: [{ name: '', sets: '', weight: '', rest: '' }],
+        exercises: [{ name: '', sets: '', reps: '', weight: '', rest: '' }],
     });
 
     useEffect(() => {
@@ -40,7 +41,7 @@ export default function ProgramEdit() {
     const addExercise = () => {
         setProgram({
             ...program,
-            exercises: [...program.exercises, { name: '', sets: '', weight: '', rest: '' }],
+            exercises: [...program.exercises, { name: '', sets: '', reps: '', weight: '', rest: '' }],
         });
     };
 
@@ -84,11 +85,19 @@ export default function ProgramEdit() {
                             />
                         </label>
                         <label className="program-edit__field">
-                            <span className="program-edit__label">מספר חזרות</span>
+                            <span className="program-edit__label">סטים</span>
                             <input
                                 className="program-edit__input"
                                 value={exercise.sets}
                                 onChange={(e) => updateExercise(idx, 'sets', e.target.value)}
+                            />
+                        </label>
+                        <label className="program-edit__field">
+                            <span className="program-edit__label">חזרות</span>
+                            <input
+                                className="program-edit__input"
+                                value={exercise.reps}
+                                onChange={(e) => updateExercise(idx, 'reps', e.target.value)}
                             />
                         </label>
                         <label className="program-edit__field">
