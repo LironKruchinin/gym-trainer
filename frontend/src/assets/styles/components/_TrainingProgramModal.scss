@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 .training-program-modal {
     position: fixed;
     top: 0;
@@ -31,7 +33,7 @@
 
 .training-program-modal__input {
     padding: 0.5rem;
-    border: 1px solid #ccc;
+    border: 1px solid $color-border;
     border-radius: 4px;
 }
 
