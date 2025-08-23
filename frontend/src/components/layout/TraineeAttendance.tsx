@@ -1,8 +1,10 @@
-import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faClock } from "@fortawesome/free-solid-svg-icons";
+import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faClock } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 
 function TraineeAttendance() {
+    const navigate = useNavigate();
     return (
         <div className="trainee-attendance">
             <div className="trainee-attendance__details">
@@ -21,7 +23,10 @@ function TraineeAttendance() {
                     </div>
                 </div>
             </div>
-            <button className="trainee-attendance__action">
+            <button
+                className="trainee-attendance__action"
+                onClick={() => navigate('/training')}
+            >
                 <span className="trainee-attendance__action-text">פתח מסך אימון</span>
             </button>
         </div>
