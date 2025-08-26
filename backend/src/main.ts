@@ -17,9 +17,16 @@ async function bootstrap() {
 	if (!fs.existsSync(uploadPath)) {
 		fs.mkdirSync(uploadPath, { recursive: true });
 	}
-	const app = await NestFactory.create<NestExpressApplication>(AppModule);
+        const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-	app.useGlobalFilters(new GlobalExceptionFilter());
+        // Disable HTTP caching so clients always receive a fresh response
+        app.set('etag', false);
+        app.use((_, res, next) => {
+                res.setHeader('Cache-Control', 'no-store');
+                next();
+        });
+
+        app.useGlobalFilters(new GlobalExceptionFilter());
 
 	app.useGlobalPipes(
 		new ValidationPipe({
