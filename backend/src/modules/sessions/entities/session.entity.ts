@@ -12,8 +12,8 @@ export class Session {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'timestamp' })
-  start_time: Date;
+  @Column({ type: 'varchar', length: 16 })
+  start_time: string;
 
   @ManyToMany(() => User, { eager: true })
   @JoinTable({

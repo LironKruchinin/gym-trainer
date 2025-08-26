@@ -18,7 +18,7 @@ export class SessionsService {
   async create(dto: CreateSessionDto) {
     const trainees = await this.users.findBy({ id: In(dto.trainee_ids) });
     const session = this.repo.create({
-      start_time: new Date(dto.start_time),
+      start_time: dto.start_time,
       trainees,
     });
     return this.repo.save(session);
@@ -35,7 +35,7 @@ export class SessionsService {
   async update(id: number, dto: UpdateSessionDto) {
     const session = await this.repo.findOneOrFail({ where: { id } });
     if (dto.start_time) {
-      session.start_time = new Date(dto.start_time);
+      session.start_time = dto.start_time;
     }
     if (dto.trainee_ids) {
       session.trainees = await this.users.findBy({ id: In(dto.trainee_ids) });
