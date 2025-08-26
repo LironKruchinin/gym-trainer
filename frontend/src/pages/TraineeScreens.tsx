@@ -2,7 +2,7 @@ import { useGetTraineesQuery, useLogTrainingMutation } from '@store/slices/api/a
 import { useAppDispatch, addLog, setTrainees } from '@store';
 import type { Trainee } from '@store/slices/api/Trainee';
 import TrainingMonitorCube from '@components/layout/TrainingMonitorCube';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 interface Exercise {
     name: string;
@@ -14,37 +14,25 @@ interface Exercise {
 interface LocalProgram {
     id: number;
     traineeName: string;
+    programName: string;
     exercises: Exercise[];
 }
-
-const localPrograms: LocalProgram[] = [
-    {
-        id: 1,
-        traineeName: "ג'ון סמות",
-        exercises: [
-            { name: 'סקוואט', sets: '3', weight: '50kg', rest: '60s' },
-            { name: 'לחיצת חזה', sets: '3', weight: '40kg', rest: '60s' },
-            { name: 'חתירה', sets: '3', weight: '30kg', rest: '60s' },
-        ],
-    },
-    {
-        id: 2,
-        traineeName: 'דנה לוי',
-        exercises: [
-            { name: 'מכרעים', sets: '3', weight: '20kg', rest: '60s' },
-            { name: 'מתח', sets: '3', weight: 'משקל גוף', rest: '60s' },
-            { name: 'בטן', sets: '3', weight: '', rest: '60s' },
-        ],
-    },
-];
 
 export default function TraineeScreens() {
     const { data: trainees = [] } = useGetTraineesQuery();
     const [logTraining] = useLogTrainingMutation();
     const dispatch = useAppDispatch();
+    const [localPrograms, setLocalPrograms] = useState<LocalProgram[]>([]);
 
     useEffect(() => {
-        localStorage.setItem('programs', JSON.stringify(localPrograms));
+        const stored = localStorage.getItem('programs');
+        if (stored) {
+            try {
+                setLocalPrograms(JSON.parse(stored) as LocalProgram[]);
+            } catch {
+                setLocalPrograms([]);
+            }
+        }
     }, []);
 
     const sortedTrainees = useMemo(
@@ -89,7 +77,7 @@ export default function TraineeScreens() {
                         <TrainingMonitorCube
                             key={program.id}
                             traineeName={program.traineeName}
-                            programName=""
+                            programName={program.programName}
                             exercises={program.exercises}
                         />
                     ))}

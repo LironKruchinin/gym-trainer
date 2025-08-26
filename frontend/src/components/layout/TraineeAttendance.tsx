@@ -36,7 +36,11 @@ function TraineeAttendance({ trainee }: Props) {
             <button className="trainee-attendance__action" onClick={() => setOpen(true)}>
                 <span className="trainee-attendance__action-text">פתח מסך אימון</span>
             </button>
-            <TrainingProgramModal isOpen={open} onClose={() => setOpen(false)} />
+            <TrainingProgramModal
+                trainee={trainee}
+                isOpen={open}
+                onClose={() => setOpen(false)}
+            />
         </div>
     );
 }
