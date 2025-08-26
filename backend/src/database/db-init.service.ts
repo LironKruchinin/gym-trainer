@@ -11,7 +11,9 @@ export class DbInitService implements OnModuleInit {
       CREATE TABLE users (
         id SERIAL PRIMARY KEY,
         first_name VARCHAR(100),
+        name VARCHAR(200),
         last_name VARCHAR(100),
+        details TEXT,
         email VARCHAR(255) UNIQUE,
         phone_num VARCHAR(20) UNIQUE,
         password VARCHAR(255),
@@ -30,6 +32,8 @@ export class DbInitService implements OnModuleInit {
         created_at TIMESTAMP DEFAULT now(),
         updated_at TIMESTAMP DEFAULT now()
       );
+      INSERT INTO users (name, email, details)
+      VALUES ('Test User', 'test@example.com', 'Sample user');
     `,
     notifications: `
       CREATE TABLE notifications (
@@ -219,6 +223,20 @@ export class DbInitService implements OnModuleInit {
         created_at TIMESTAMP DEFAULT now(),
         updated_at TIMESTAMP DEFAULT now()
       );
+      INSERT INTO training_programs (name, description, difficulty_level, workout_type, is_template)
+      VALUES ('Sample Program', 'Demo program', 'beginner', 'general', true);
+    `,
+    training_times: `
+      CREATE TABLE training_times (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+        training_time TIMESTAMP NOT NULL,
+        program_id INTEGER REFERENCES training_programs(id) ON DELETE SET NULL,
+        details JSONB
+      );
+      CREATE INDEX idx_training_times_user ON training_times(user_id);
+      INSERT INTO training_times (user_id, training_time, program_id, details)
+      VALUES (1, NOW(), 1, '{}');
     `,
   };
 
@@ -242,6 +260,7 @@ export class DbInitService implements OnModuleInit {
     { tbl_name: 'exercise_equipment', dependencies: ['exercises', 'equipment'] },
     { tbl_name: 'workout_types', dependencies: [] },
     { tbl_name: 'training_programs', dependencies: [] },
+    { tbl_name: 'training_times', dependencies: ['users', 'training_programs'] },
   ];
 
   constructor(private dataSource: DataSource) { }

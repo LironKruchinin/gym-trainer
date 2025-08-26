@@ -11,19 +11,24 @@ import {
 export default function ProgramManagement() {
     const navigate = useNavigate();
     const [programs, setPrograms] = useState<Program[]>([]);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         getPrograms()
             .then(setPrograms)
-            .catch((err) => console.error(err));
+            .catch((err) => {
+                console.error(err);
+                setError(err.message || 'Failed to load');
+            });
     }, []);
 
     const removeProgram = async (id: number) => {
         try {
             await deleteProgram(id);
             setPrograms((prev) => prev.filter((p) => p.id !== id));
-        } catch (err) {
+        } catch (err: any) {
             console.error(err);
+            setError(err.message || 'Failed to delete');
         }
     };
 
@@ -37,7 +42,12 @@ export default function ProgramManagement() {
             <p className="program-management__subtitle">
                 יצירה ועריכה של תוכניות אימון כלליות
             </p>
-
+            {error && <p className="program-management__error">{error}</p>}
+            {programs.length === 0 && !error && (
+                <p className="program-management__empty">
+                    אין תוכניות זמינות. צור רשומה חדשה כדי להתחיל.
+                </p>
+            )}
             <ul className="program-management__list">
                 {programs.map((program) => (
                     <li key={program.id} className="program-management__item">

@@ -2,6 +2,8 @@ export interface UserEntity {
     id: string;
     first_name: string;
     last_name: string;
+    name?: string;
+    details?: string;
     email: string;
     password?: string; // Optional, as it may not be returned in some contexts
     auth_provider: 'email' | 'google' | 'facebook' | 'apple'; // Extend as needed

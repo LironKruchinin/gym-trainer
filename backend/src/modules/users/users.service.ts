@@ -22,14 +22,16 @@ export class UsersService {
 		private readonly roleRepository: Repository<Role>,
 	) { }
 
-	async create(createUserDto: CreateUserDto): Promise<User> {
-		try {
-			const user = this.userRepository.create({
-				first_name: createUserDto.first_name,
-				last_name: createUserDto.last_name,
-				email: createUserDto.email,
-				password: createUserDto.password,
-			});
+        async create(createUserDto: CreateUserDto): Promise<User> {
+                try {
+                        const user = this.userRepository.create({
+                                first_name: createUserDto.first_name,
+                                last_name: createUserDto.last_name,
+                                name: createUserDto.name,
+                                details: createUserDto.details,
+                                email: createUserDto.email,
+                                password: createUserDto.password,
+                        });
 
 			const basic = await this.roleRepository.findOneBy({ name: 'basic' });
 			if (!basic) throw new NotFoundException('Role "basic" not found');
@@ -67,11 +69,13 @@ export class UsersService {
 
 	async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
 		try {
-			const result = await this.userRepository.update(id, {
-				first_name: updateUserDto.first_name,
-				last_name: updateUserDto.last_name,
-				email: updateUserDto.email,
-			});
+                        const result = await this.userRepository.update(id, {
+                                first_name: updateUserDto.first_name,
+                                last_name: updateUserDto.last_name,
+                                name: updateUserDto.name,
+                                details: updateUserDto.details,
+                                email: updateUserDto.email,
+                        });
 
 			if (result.affected === 0) {
 				throw new NotFoundException(`User with id ${id} not found`);
