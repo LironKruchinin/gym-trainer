@@ -26,6 +26,11 @@ export class TraineesController {
     return this.svc.findAll();
   }
 
+  @Get('get')
+  getToday() {
+    return this.svc.findToday();
+  }
+
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.svc.findOne(id);
