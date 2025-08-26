@@ -26,9 +26,10 @@ export default function ProgramManagement() {
         try {
             await deleteProgram(id);
             setPrograms((prev) => prev.filter((p) => p.id !== id));
-        } catch (err: any) {
+        } catch (err) {
             console.error(err);
-            setError(err.message || 'Failed to delete');
+            const message = err instanceof Error ? err.message : 'Failed to delete';
+            setError(message);
         }
     };
 
