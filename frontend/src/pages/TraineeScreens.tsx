@@ -1,12 +1,8 @@
-import {
-    useGetTraineesQuery,
-    useLogTrainingMutation,
-    useSyncTraineesMutation,
-} from '@store/slices/api/apiSlice';
+import { useGetTraineesQuery, useLogTrainingMutation } from '@store/slices/api/apiSlice';
 import { useAppDispatch, addLog, setTrainees } from '@store';
 import type { Trainee } from '@store/slices/api/Trainee';
 import TrainingMonitorCube from '@components/layout/TrainingMonitorCube';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 interface Exercise {
     name: string;
@@ -45,19 +41,25 @@ const localPrograms: LocalProgram[] = [
 export default function TraineeScreens() {
     const { data: trainees = [] } = useGetTraineesQuery();
     const [logTraining] = useLogTrainingMutation();
-    const [syncTrainees] = useSyncTraineesMutation();
     const dispatch = useAppDispatch();
 
     useEffect(() => {
         localStorage.setItem('programs', JSON.stringify(localPrograms));
-        syncTrainees();
-    }, [syncTrainees]);
+    }, []);
+
+    const sortedTrainees = useMemo(
+        () =>
+            [...trainees].sort(
+                (a, b) => new Date(a.reservedTime).getTime() - new Date(b.reservedTime).getTime()
+            ),
+        [trainees]
+    );
 
     useEffect(() => {
-        dispatch(setTrainees(trainees));
-    }, [trainees, dispatch]);
+        dispatch(setTrainees(sortedTrainees));
+    }, [sortedTrainees, dispatch]);
 
-    const useLocal = (!trainees || trainees.length === 0) && localPrograms.length > 0;
+    const useLocal = (!sortedTrainees || sortedTrainees.length === 0) && localPrograms.length > 0;
 
     const completeTraining = (trainee: Trainee) => {
         if (!trainee.program) return;
@@ -93,7 +95,7 @@ export default function TraineeScreens() {
                     ))}
 
                 {!useLocal &&
-                    trainees.map((t) => (
+                    sortedTrainees.map((t) => (
                         <div key={t.id} className="trainee-card">
                             <TrainingMonitorCube
                                 traineeName={t.name}
