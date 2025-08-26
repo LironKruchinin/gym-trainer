@@ -8,7 +8,7 @@ import type { Exercise } from './Exercise';
 export const api = createApi({
     reducerPath: 'api',                         // unique key in the store
     baseQuery: fetchBaseQuery({
-        baseUrl: import.meta.env.VITE_API_URL,    // e.g. 'http://localhost:4000'
+        baseUrl: import.meta.env.VITE_API_URL || 'http://localhost:3001',    // default local API URL
         prepareHeaders(headers) {
             // if you have auth tokens:
             // const token = localStorage.getItem('token');
