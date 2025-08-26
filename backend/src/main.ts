@@ -52,12 +52,16 @@ async function bootstrap() {
 	);
 
 	// Enable CORS
-	app.enableCors({
-		origin: ['http://localhost:3000', 'http://localhost:8081'],
-		allowedHeaders: ['Content-Type', 'Authorization'],
-		methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-		credentials: true,
-	});
+        app.enableCors({
+                origin: [
+                        'http://localhost:3000',
+                        'http://localhost:8081',
+                        'http://localhost:5173',
+                ],
+                allowedHeaders: ['Content-Type', 'Authorization'],
+                methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+                credentials: true,
+        });
 
 	// Don't serve ./uploads/private
 	app.useStaticAssets(join(__dirname, '..', 'uploads/public'), {
