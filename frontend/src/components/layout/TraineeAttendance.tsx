@@ -1,37 +1,46 @@
-import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faClock } from '@fortawesome/free-solid-svg-icons';
-import TrainingProgramModal from '../TrainingProgramModal';
+import type { Trainee } from '@store/slices/api/Trainee';
 
-function TraineeAttendance() {
-    const [open, setOpen] = useState(false);
+interface Props {
+    trainee: Trainee;
+}
+
+function TraineeAttendance({ trainee }: Props) {
+    const time = new Date(trainee.reservedTime).toLocaleTimeString('en-GB', {
+        hour: '2-digit',
+        minute: '2-digit',
+    });
+
     return (
         <div className="trainee-attendance">
             <div className="trainee-attendance__details">
-                <div className="trainee-attendance__status trainee-attendance__status--waiting">ממתין</div> {/* This is the status of the trainee, can be "ממתין" (--waiting), "מתאמן" (--active), "ביטל" (--canceled), or "סיים" (--finished) */}
-
+                <div className="trainee-attendance__status trainee-attendance__status--waiting">ממתין</div>
                 <div className="trainee-attendance__details">
                     <FontAwesomeIcon className="icon" icon={faUser} />
-                    <span className="trainee-attendance__name">שם המתאמן</span>
+                    <span className="trainee-attendance__name">{trainee.name}</span>
 
                     <div className="trainee-attendance__time">
                         <FontAwesomeIcon className="icon" icon={faClock} />
                         <div className="trainee-attendance__time-value">
-                            00:00
+                            {time}
                             <span className="trainee-attendance__time-duration">(שעה)</span>
                         </div>
                     </div>
                 </div>
             </div>
-            <button
-                className="trainee-attendance__action"
-                onClick={() => setOpen(true)}
-            >
-                <span className="trainee-attendance__action-text">פתח מסך אימון</span>
-            </button>
-            <TrainingProgramModal isOpen={open} onClose={() => setOpen(false)} />
+            {trainee.program?.exercises && trainee.program.exercises.length > 0 && (
+                <ul className="trainee-attendance__exercise-list">
+                    {trainee.program.exercises.map((ex, idx) => (
+                        <li key={idx} className="trainee-attendance__exercise-item">
+                            {ex.name}
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 }
 
 export default TraineeAttendance;
+
