@@ -3,10 +3,12 @@ import { faCalendar, faGear, faPlay, faTv } from '@fortawesome/free-solid-svg-ic
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useGetTraineesQuery } from '@store/slices/api/apiSlice';
 
 export default function Home() {
     const navigate = useNavigate();
     const [currentTime, setCurrentTime] = useState('');
+    const { data: trainees = [] } = useGetTraineesQuery();
 
     const userOptions = [
         {
@@ -71,8 +73,10 @@ export default function Home() {
                 <h2 className="home__trainee_schedual-title">
                     <FontAwesomeIcon className="icon" icon={faCalendar} />
                     <span className="home__trainee_schedual-title-text">לוח האימונים להיום</span>
-                    </h2>
-                <TraineeAttendance />
+                </h2>
+                {trainees.map((t) => (
+                    <TraineeAttendance key={t.id} trainee={t} />
+                ))}
             </div>
         </div>
     );
