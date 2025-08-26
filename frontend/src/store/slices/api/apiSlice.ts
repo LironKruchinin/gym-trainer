@@ -34,7 +34,7 @@ export const api = createApi({
             invalidatesTags: [{ type: 'Post', id: 'LIST' }],
         }),
         getTrainees: build.query<Trainee[], void>({
-            query: () => '/trainee/get',
+            query: () => '/trainees/get',
             providesTags: (result) =>
                 result
                     ? [
