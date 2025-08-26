@@ -18,11 +18,17 @@ export class User {
     @Column({ nullable: true })
     first_name?: string;
 
+    @Column({ length: 200, nullable: true })
+    name?: string;
+
     @Column({ type: 'varchar', length: 50, nullable: true })
     recovery_code: string | null;
 
     @Column({ length: 100, nullable: true })
     last_name?: string;
+
+    @Column({ type: 'text', nullable: true })
+    details?: string;
 
     @Column({ length: 255, unique: true, nullable: true })
     email?: string;

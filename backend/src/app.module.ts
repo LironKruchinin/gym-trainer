@@ -9,6 +9,7 @@ import { TrainingProgramsModule } from './modules/training-programs/training-pro
 import { TraineesModule } from './modules/trainees/trainees.module';
 import { TrainingLogsModule } from './modules/training-logs/training-logs.module';
 import { ExercisesModule } from './modules/exercises/exercises.module';
+import { TrainingTimesModule } from './modules/training-times/training-times.module';
 
 @Module({
 	imports: [
@@ -22,6 +23,7 @@ import { ExercisesModule } from './modules/exercises/exercises.module';
                 TraineesModule,
                 TrainingLogsModule,
                 ExercisesModule,
+                TrainingTimesModule,
         ],
 	controllers: [],
 	providers: [],
