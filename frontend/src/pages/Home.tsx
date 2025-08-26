@@ -3,12 +3,13 @@ import { faCalendar, faGear, faPlay, faTv } from '@fortawesome/free-solid-svg-ic
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGetTraineesQuery } from '@store/slices/api/apiSlice';
+import axios from 'axios';
+import type { Trainee } from '@store/slices/api/Trainee';
 
 export default function Home() {
     const navigate = useNavigate();
     const [currentTime, setCurrentTime] = useState('');
-    const { data: trainees = [] } = useGetTraineesQuery();
+    const [trainees, setTrainees] = useState<Trainee[]>([]);
     const sortedTrainees = useMemo(
         () =>
             [...trainees].sort(
@@ -40,6 +41,11 @@ export default function Home() {
             iconColor: '#1d9e59',
         },
     ];
+
+    useEffect(() => {
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+        axios.get<Trainee[]>(`${apiUrl}/trainees/get`).then((res) => setTrainees(res.data));
+    }, []);
 
     useEffect(() => {
         const updateClock = () => {

@@ -5,7 +5,7 @@ import { TraineesService } from './trainees.service';
 export class TraineeGetController {
   constructor(private readonly svc: TraineesService) {}
 
-  @Get('trainee/get')
+  @Get('trainees/get')
   getToday() {
     return this.svc.findToday();
   }
