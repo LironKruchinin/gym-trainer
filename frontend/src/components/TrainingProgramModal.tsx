@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import SearchableSelect from './ui/SearchableSelect';
 import { getPrograms, type Program } from '../services/trainingPrograms';
 import type { Trainee } from '@store/slices/api/Trainee';
+import { useAssignProgramMutation } from '@store/slices/api/apiSlice';
+
 
 interface Props {
     isOpen: boolean;
@@ -9,17 +11,11 @@ interface Props {
     trainee: Trainee;
 }
 
-interface SavedProgram {
-    id: number;
-    traineeName: string;
-    programName: string;
-    exercises: Program['exercises'];
-}
-
 export default function TrainingProgramModal({ isOpen, onClose, trainee }: Props) {
     const [programs, setPrograms] = useState<Program[]>([]);
     const [selection, setSelection] = useState('');
     const trainingOptions = ['כוח', 'קרדיו', 'גמישות'];
+    const [assignProgram] = useAssignProgramMutation();
 
     useEffect(() => {
         if (isOpen) {
@@ -28,6 +24,7 @@ export default function TrainingProgramModal({ isOpen, onClose, trainee }: Props
                 .catch((err) => console.error(err));
         }
     }, [isOpen]);
+
 
     const handleSelect = (program: Program) => {
         const existing = localStorage.getItem('programs');
