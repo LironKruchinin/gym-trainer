@@ -10,6 +10,7 @@ export default function Home() {
     const navigate = useNavigate();
     const [currentTime, setCurrentTime] = useState('');
     const [trainees, setTrainees] = useState<Trainee[]>([]);
+    const [debugTrainees, setDebugTrainees] = useState<Trainee[]>([]);
     const sortedTrainees = useMemo(
         () =>
             [...trainees].sort(
@@ -45,6 +46,7 @@ export default function Home() {
     useEffect(() => {
         const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
         axios.get<Trainee[]>(`${apiUrl}/trainees/get`).then((res) => setTrainees(res.data));
+        axios.get<Trainee[]>(`${apiUrl}/trainees`).then((res) => setDebugTrainees(res.data));
     }, []);
 
     useEffect(() => {
@@ -90,6 +92,17 @@ export default function Home() {
                 {sortedTrainees.map((t) => (
                     <TraineeAttendance key={t.id} trainee={t} />
                 ))}
+            </div>
+
+            <div className="home__debug container">
+                <h2>Debug: כל המתאמנים</h2>
+                <ul>
+                    {debugTrainees.map((t) => (
+                        <li key={t.id}>
+                            {t.name} - {new Date(t.reservedTime).toLocaleString('en-GB')}
+                        </li>
+                    ))}
+                </ul>
             </div>
         </div>
     );
