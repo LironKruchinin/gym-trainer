@@ -1,7 +1,8 @@
-import { IsArray, IsDateString, IsInt } from 'class-validator';
+import { IsArray, IsInt, IsString, Matches } from 'class-validator';
 
 export class CreateSessionDto {
-  @IsDateString()
+  @IsString()
+  @Matches(/^\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}$/)
   start_time: string;
 
   @IsArray()
