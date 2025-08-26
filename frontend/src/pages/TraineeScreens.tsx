@@ -2,12 +2,13 @@ import { useGetTraineesQuery, useLogTrainingMutation } from '@store/slices/api/a
 import { useAppDispatch, addLog, setTrainees } from '@store';
 import type { Trainee } from '@store/slices/api/Trainee';
 import TrainingMonitorCube from '@components/layout/TrainingMonitorCube';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export default function TraineeScreens() {
     const { data: trainees = [] } = useGetTraineesQuery();
     const [logTraining] = useLogTrainingMutation();
     const dispatch = useAppDispatch();
+    const [localPrograms, setLocalPrograms] = useState<LocalProgram[]>([]);
 
     const sortedTrainees = useMemo(
         () =>

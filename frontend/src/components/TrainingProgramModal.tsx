@@ -4,6 +4,7 @@ import { getPrograms, type Program } from '../services/trainingPrograms';
 import type { Trainee } from '@store/slices/api/Trainee';
 import { useAssignProgramMutation } from '@store/slices/api/apiSlice';
 
+
 interface Props {
     isOpen: boolean;
     onClose: () => void;
@@ -24,14 +25,31 @@ export default function TrainingProgramModal({ isOpen, onClose, trainee }: Props
         }
     }, [isOpen]);
 
-    const handleSelect = async (program: Program) => {
-        if (!program.id) return;
-        try {
-            await assignProgram({ id: trainee.id, programId: program.id }).unwrap();
-            onClose();
-        } catch (err) {
-            console.error(err);
+
+    const handleSelect = (program: Program) => {
+        const existing = localStorage.getItem('programs');
+        let parsed: SavedProgram[] = [];
+        if (existing) {
+            try {
+                parsed = JSON.parse(existing) as SavedProgram[];
+            } catch {
+                parsed = [];
+            }
         }
+
+        const newEntry: SavedProgram = {
+            id: trainee.id,
+            traineeName: trainee.name,
+            programName: program.name,
+            exercises: program.exercises,
+        };
+
+        const idx = parsed.findIndex((p) => p.id === trainee.id);
+        if (idx >= 0) parsed[idx] = newEntry;
+        else parsed.push(newEntry);
+
+        localStorage.setItem('programs', JSON.stringify(parsed));
+        onClose();
     };
 
     if (!isOpen) return null;
