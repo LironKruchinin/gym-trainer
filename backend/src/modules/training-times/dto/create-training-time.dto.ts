@@ -1,11 +1,11 @@
-import { IsInt, IsOptional, IsDateString, IsObject } from 'class-validator';
+import { IsInt, IsOptional, IsObject } from 'class-validator';
 
 export class CreateTrainingTimeDto {
   @IsInt()
   userId: number;
 
-  @IsDateString()
-  trainingTime: string;
+  @IsInt()
+  trainingTime: number;
 
   @IsInt()
   @IsOptional()

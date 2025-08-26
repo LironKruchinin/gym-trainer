@@ -10,8 +10,14 @@ export class TrainingTime {
   @ManyToOne(() => User, { eager: true, onDelete: 'CASCADE' })
   user: User;
 
-  @Column({ type: 'timestamp' })
-  training_time: Date;
+  @Column({
+    type: 'bigint',
+    transformer: {
+      to: (value: number) => value,
+      from: (value: string) => parseInt(value, 10),
+    },
+  })
+  training_time: number;
 
   @ManyToOne(() => TrainingProgram, { eager: true, nullable: true, onDelete: 'SET NULL' })
   program?: TrainingProgram | null;

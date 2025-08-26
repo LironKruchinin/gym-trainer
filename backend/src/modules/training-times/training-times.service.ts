@@ -25,7 +25,7 @@ export class TrainingTimesService {
       }
       const entity = this.repo.create({
         user,
-        training_time: new Date(dto.trainingTime),
+        training_time: dto.trainingTime,
         program: program ?? undefined,
         details: dto.details,
       });
