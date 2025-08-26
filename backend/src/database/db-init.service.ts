@@ -236,7 +236,12 @@ export class DbInitService implements OnModuleInit {
       );
       CREATE INDEX idx_training_times_user ON training_times(user_id);
       INSERT INTO training_times (user_id, training_time, program_id, details)
-      VALUES (1, FLOOR(EXTRACT(EPOCH FROM NOW()) * 1000)::bigint, 1, '{}');
+      VALUES (
+        1,
+        FLOOR(EXTRACT(EPOCH FROM TIMESTAMP '2025-08-27 10:00:00') * 1000)::bigint,
+        1,
+        '{}'
+      );
     `,
   };
 
