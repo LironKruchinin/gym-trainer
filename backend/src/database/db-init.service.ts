@@ -230,13 +230,13 @@ export class DbInitService implements OnModuleInit {
       CREATE TABLE training_times (
         id SERIAL PRIMARY KEY,
         user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-        training_time TIMESTAMP NOT NULL,
+        training_time BIGINT NOT NULL,
         program_id INTEGER REFERENCES training_programs(id) ON DELETE SET NULL,
         details JSONB
       );
       CREATE INDEX idx_training_times_user ON training_times(user_id);
       INSERT INTO training_times (user_id, training_time, program_id, details)
-      VALUES (1, NOW(), 1, '{}');
+      VALUES (1, FLOOR(EXTRACT(EPOCH FROM NOW()) * 1000)::bigint, 1, '{}');
     `,
   };
 
