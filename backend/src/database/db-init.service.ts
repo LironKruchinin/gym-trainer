@@ -1,5 +1,7 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { DataSource } from 'typeorm';
+import { TrainingProgram } from '../modules/training-programs/entities/training-program.entity';
+import { Trainee } from '../modules/trainees/entities/trainee.entity';
 
 @Injectable()
 export class DbInitService implements OnModuleInit {
@@ -334,5 +336,45 @@ export class DbInitService implements OnModuleInit {
     }
 
     await runner.release();
+
+    // Seed demo training program and trainees for development
+    const programRepo = this.dataSource.getRepository(TrainingProgram);
+    if ((await programRepo.count()) === 0) {
+      await programRepo.save({
+        name: 'Demo Program',
+        description: 'Sample program for development',
+        difficultyLevel: 'beginner',
+        workoutType: 'general',
+        isTemplate: true,
+        exercises: [
+          { name: 'Push Ups', sets: 3, reps: '12', weight: 'bodyweight' },
+        ],
+      });
+    }
+
+    const traineeRepo = this.dataSource.getRepository(Trainee);
+    if ((await traineeRepo.count()) === 0) {
+      const today = new Date();
+      const t1 = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate(),
+        10,
+        0,
+        0,
+      );
+      const t2 = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate(),
+        12,
+        0,
+        0,
+      );
+      await traineeRepo.insert([
+        { name: 'Alice Cohen', reservedTime: t1 },
+        { name: 'Bob Levi', reservedTime: t2 },
+      ]);
+    }
   }
 }
