@@ -25,15 +25,15 @@ export class TraineesService {
     });
   }
 
-  findAll() {
-    return this.repo.find();
+  async findAll() {
+    return await this.repo.find();
   }
 
-  findToday() {
+  async findToday() {
     const now = new Date();
     const start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const end = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-    return this.repo.find({
+    return await this.repo.find({
       where: { reservedTime: Between(start, end) },
       order: { reservedTime: 'ASC' },
     });

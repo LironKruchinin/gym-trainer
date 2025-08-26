@@ -22,13 +22,13 @@ export class TraineesController {
   }
 
   @Get()
-  findAll() {
-    return this.svc.findAll();
+  async findAll() {
+    return await this.svc.findAll();
   }
 
   @Get('get')
-  getToday() {
-    return this.svc.findToday();
+  async getToday() {
+    return await this.svc.findToday();
   }
 
   @Get(':id')
