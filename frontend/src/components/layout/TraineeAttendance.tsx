@@ -1,6 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faClock } from '@fortawesome/free-solid-svg-icons';
 import type { Trainee } from '@store/slices/api/Trainee';
+import TrainingProgramModal from '@components/TrainingProgramModal';
+import { useState } from 'react';
 
 interface Props {
     trainee: Trainee;
@@ -11,6 +13,8 @@ function TraineeAttendance({ trainee }: Props) {
         hour: '2-digit',
         minute: '2-digit',
     });
+
+    const [open, setOpen] = useState(false);
 
     return (
         <div className="trainee-attendance">
@@ -29,15 +33,10 @@ function TraineeAttendance({ trainee }: Props) {
                     </div>
                 </div>
             </div>
-            {trainee.program?.exercises && trainee.program.exercises.length > 0 && (
-                <ul className="trainee-attendance__exercise-list">
-                    {trainee.program.exercises.map((ex, idx) => (
-                        <li key={idx} className="trainee-attendance__exercise-item">
-                            {ex.name}
-                        </li>
-                    ))}
-                </ul>
-            )}
+            <button className="trainee-attendance__action" onClick={() => setOpen(true)}>
+                <span className="trainee-attendance__action-text">פתח מסך אימון</span>
+            </button>
+            <TrainingProgramModal isOpen={open} onClose={() => setOpen(false)} />
         </div>
     );
 }
