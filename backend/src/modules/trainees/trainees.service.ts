@@ -7,6 +7,7 @@ import { UpdateTraineeDto } from './dto/update-trainee.dto';
 import { AssignProgramDto } from './dto/assign-program.dto';
 import { TrainingProgram } from '../training-programs/entities/training-program.entity';
 import { ConfigService } from '@nestjs/config';
+import { Between } from 'typeorm';
 
 @Injectable()
 export class TraineesService {
@@ -26,6 +27,16 @@ export class TraineesService {
 
   findAll() {
     return this.repo.find();
+  }
+
+  findToday() {
+    const now = new Date();
+    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const end = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+    return this.repo.find({
+      where: { reservedTime: Between(start, end) },
+      order: { reservedTime: 'ASC' },
+    });
   }
 
   findOne(id: number) {

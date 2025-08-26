@@ -1,7 +1,7 @@
 import TraineeAttendance from '@components/layout/TraineeAttendance';
 import { faCalendar, faGear, faPlay, faTv } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetTraineesQuery } from '@store/slices/api/apiSlice';
 
@@ -9,6 +9,13 @@ export default function Home() {
     const navigate = useNavigate();
     const [currentTime, setCurrentTime] = useState('');
     const { data: trainees = [] } = useGetTraineesQuery();
+    const sortedTrainees = useMemo(
+        () =>
+            [...trainees].sort(
+                (a, b) => new Date(a.reservedTime).getTime() - new Date(b.reservedTime).getTime()
+            ),
+        [trainees]
+    );
 
     const userOptions = [
         {
@@ -74,7 +81,7 @@ export default function Home() {
                     <FontAwesomeIcon className="icon" icon={faCalendar} />
                     <span className="home__trainee_schedual-title-text">לוח האימונים להיום</span>
                 </h2>
-                {trainees.map((t) => (
+                {sortedTrainees.map((t) => (
                     <TraineeAttendance key={t.id} trainee={t} />
                 ))}
             </div>
